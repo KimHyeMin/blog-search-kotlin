@@ -35,7 +35,7 @@ export default {
 
       this.$store.dispatch('$auth/register', this.signUpForm)
           .then(data => {
-                this.message = data.message
+                this.message = data.result.message
                 this.successful = true
               }, error => {
                 this.message = error.message

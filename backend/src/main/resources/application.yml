@@ -1,0 +1,12 @@
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+
+#todo must extracted to Vault
+client:
+  kakao:
+    token: "KakaoAK 0b76f0f3464885c151eebf5cc6479932"
+    url: "https://dapi.kakao.com/v2/search/blog"
