@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div id="app" class="main-content bg-default">
 
     <router-view></router-view>
   </div>
@@ -18,6 +18,7 @@ export default {
 <style>
 
 #app {
+  min-height: 100vh;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -25,4 +26,21 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.mr-8 {
+  margin-right: 8px;
+}
+
+.font-italic {
+  font-style: italic!important;
+}
+.text-muted {
+  color: #8898aa!important;
+}
+
+.text-left {
+  text-align: left;
+}
+
+
 </style>

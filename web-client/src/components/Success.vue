@@ -4,7 +4,7 @@
         {{this.message}}
     </b-alert>
     <span><router-link to="/login">로그인</router-link>하러 가기 ||</span>
-    <span>&nbsp;<router-link to="/signup">회원가입으로</router-link>으로 돌아가기</span>
+    <span>&nbsp;<router-link to="/signup">회원가입</router-link>으로 돌아가기</span>
   </div>
 </template>
 <script>
