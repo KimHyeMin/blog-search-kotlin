@@ -5,5 +5,9 @@ export class SignUpForm {
         this.email = email;
         this.password = password;
     }
+
+  static init() {
+    return new SignUpForm('', '', '', '')
+  }
 }
 
