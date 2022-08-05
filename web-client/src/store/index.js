@@ -1,12 +1,12 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
+import auth from './auth.js'
 
 Vue.use(Vuex);
 
-export default function createStore() {
-  return new Vuex.Store({
-    module: {
-
+const store = new Vuex.Store({
+    modules: {
+      $auth: auth
     },
     state() {
       return {
@@ -21,7 +21,7 @@ export default function createStore() {
     },
     getters: {
 
-    }
-  });
-}
+    },
+});
 
+export default store
