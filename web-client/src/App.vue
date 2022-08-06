@@ -31,6 +31,10 @@ export default {
   margin-right: 8px;
 }
 
+.mt-50 {
+  margin-top: 50px;
+}
+
 .font-italic {
   font-style: italic!important;
 }

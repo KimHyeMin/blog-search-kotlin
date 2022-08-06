@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <search></search>
+    <popular></popular>
     <Favorites></Favorites>
   </div>
 </template>
@@ -8,12 +9,14 @@
 <script>
 import Search from "@/components/Search";
 import Favorites from "@/components/Favorites";
+import Popular from "@/components/Popular";
 
 export default {
   name: "dashboard",
   components: {
     Search,
-    Favorites
+    Favorites,
+    Popular
   },
   data() {
     return {}

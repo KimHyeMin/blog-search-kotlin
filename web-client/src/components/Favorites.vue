@@ -1,5 +1,5 @@
 <template>
-  <div class="favorites mt-4">
+  <div class="favorites mt-50">
     <h4>My Favorites</h4>
     <Favorite  title="블로그 글 제목dddddddddddddddddddddddddddddddddddddddddddddddddddddaggg"
                sub-title="블로그 글 요약"
