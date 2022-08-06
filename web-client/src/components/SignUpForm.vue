@@ -68,7 +68,7 @@ import {SignUpForm} from "@/models"
 import BaseInput from "@/components/common/BaseInput";
 
 export default {
-  name: 'signUpForm',
+  name: 'SignUpForm',
   components: {
     BaseInput
   },

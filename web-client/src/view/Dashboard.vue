@@ -1,31 +1,30 @@
 <template>
   <div class="dashboard">
-    <DashboardNavbar></DashboardNavbar>
-    <search></search>
-    <popular></popular>
-    <Favorites></Favorites>
+    <search-result v-if="searched"></search-result>
+    <popular v-if="!searched"></popular>
+    <favorites v-if="!searched"></favorites>
   </div>
 </template>
 
 <script>
-import Search from "@/components/Search";
 import Favorites from "@/components/Favorites";
 import Popular from "@/components/Popular";
-import DashboardNavbar from "@/components/DashboardNavbar";
+import SearchResult from "@/components/SearchResult";
 
 export default {
-  name: "dashboard",
+  name: "Dashboard",
   components: {
-    DashboardNavbar,
-    Search,
+    SearchResult,
     Favorites,
     Popular
   },
   data() {
     return {}
   },
-  computed() {
-
+  computed: {
+    searched(){
+      return !!this.$store.state.$search.results
+    }
   },
   methods: {
 
@@ -33,9 +32,5 @@ export default {
 }
 </script>
 <style scoped>
-  .dashboard {
-    width: 80%;
-    margin: 0 auto;
-    min-width: 600px;
-  }
+
 </style>

@@ -2,10 +2,11 @@
   <div class="dashboard-navbar mb-4 mt-4">
     <b-navbar toggleable class="navbar-dark">
       <div class="container-fluid">
-        <div class="brand">Search Blog</div>
-        <div>
-          <b-icon icon="person-circle"></b-icon>
+        <div class="brand" @click="routeToDashboard">Search Blog</div>
+        <div class="menu">
           <span class="name">{{userName}}</span>
+          <b-button size="sm" pill variant="outline-danger" @click="routeToFavorite"><b-icon icon="heart-fill"></b-icon></b-button>
+          <b-button size="sm" pill variant="outline-warning" @click="routeToPopular"><b-icon icon="graph-up"></b-icon></b-button>
         </div>
       </div>
     </b-navbar>
@@ -13,6 +14,8 @@
 </template>
 
 <script>
+import Dashboard from "@/view/Dashboard";
+
 export default {
   name: "DashboardNavbar",
   data() {
@@ -24,13 +27,26 @@ export default {
     userName() {
       return this.$store.state.userName;
     }
+  },
+  methods: {
+    routeToFavorite() {
+      this.$router.push("favorite")
+    },
+    routeToDashboard() {
+      if (this.$router.currentRoute.name !== Dashboard.name) {
+        this.$router.push("/")
+      }
+    },
+    routeToPopular() {
+      this.$router.push("popular")
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.name {
-  margin-left: 6px;
+.menu > * {
+  margin-right: 10px;
 }
 
 .brand {

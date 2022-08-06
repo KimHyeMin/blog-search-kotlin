@@ -29,7 +29,7 @@
 <script>
   export default {
     inheritAttrs: false,
-    name: "base-input",
+    name: "BaseInput",
     props: {
       group: {
         type: Boolean,

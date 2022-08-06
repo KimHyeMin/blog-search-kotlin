@@ -10,7 +10,7 @@
 <script>
 
 export default {
-  name: 'success',
+  name: 'Success',
   data() {
     return {
       message: "",

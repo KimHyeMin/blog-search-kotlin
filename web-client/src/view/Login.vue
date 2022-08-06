@@ -51,7 +51,7 @@
 import BaseInput from "@/components/common/BaseInput";
 
 export default {
-  name: 'login',
+  name: 'Login',
   components: {
     BaseInput
   },
