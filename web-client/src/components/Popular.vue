@@ -40,5 +40,6 @@ export default {
 <style scoped lang="scss">
 .popular{
   text-align: left;
+  height: 400px;
 }
 </style>

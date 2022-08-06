@@ -10,7 +10,7 @@ const store = new Vuex.Store({
     },
     state() {
       return {
-
+        userName: "김혜민"
       }
     },
     mutations: {

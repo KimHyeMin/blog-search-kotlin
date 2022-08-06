@@ -74,4 +74,8 @@ export default {
 .bg-secondary {
   background-color: #f7fafc!important;
 }
+
+.login {
+  margin-top: 60px;
+}
 </style>
