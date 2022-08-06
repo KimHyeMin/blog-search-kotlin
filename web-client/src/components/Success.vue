@@ -1,10 +1,15 @@
 <template>
   <div class="result">
-    <b-alert show :variant="alertType">
-        {{this.message}}
-    </b-alert>
-    <span><router-link to="/login">로그인</router-link>하러 가기 ||</span>
-    <span>&nbsp;<router-link to="/signup">회원가입</router-link>으로 돌아가기</span>
+    <b-container class="container">
+
+      <b-row class="justify-content-center">
+        <b-col xl="7" lg="6" md="8" class="px-5">
+            <b-alert class="jumbotron" show :variant="alertType">{{this.message}}</b-alert>
+            <span><router-link to="/login">Go to login</router-link> ||&nbsp;
+            <router-link to="/signup">Create new account</router-link></span>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 <script>
@@ -35,5 +40,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.jumbotron {
+  height: 200px;
+  font-size: 25px;
+  padding: 4rem 2rem;
+}
 </style>

@@ -4,9 +4,34 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
+  h2:
+    console:
+      enabled: true
+      path: "/h2-console"
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:service
+    username: "sa"
+    password:
+
 
 #todo must extracted to Vault
 client:
   kakao:
     token: "KakaoAK 0b76f0f3464885c151eebf5cc6479932"
     url: "https://dapi.kakao.com/v2/search/blog"
+
+

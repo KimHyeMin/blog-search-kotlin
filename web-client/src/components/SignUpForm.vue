@@ -30,9 +30,9 @@
                     </base-input>
                     <base-input alternative
                                 class="mb-3"
-                                placeholder="secondName"
+                                placeholder="lastName"
                                 style="width:100%"
-                                v-model="signUpForm.secondName">
+                                v-model="signUpForm.lastName">
                     </base-input>
                   </div>
                   <base-input alternative
