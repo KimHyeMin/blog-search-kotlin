@@ -2,6 +2,10 @@ package com.lily.backend.user;
 
 import com.lily.backend.common.dto.APIResponse;
 import com.lily.backend.user.dto.UserDto;
+import com.lily.backend.user.request.LoginRequest;
+import com.lily.backend.user.request.SignupRequest;
+import com.lily.backend.user.response.JwtResponse;
+import com.lily.backend.user.response.SingupResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +30,17 @@ public class UserController {
     return APIResponse.<SingupResult>builder()
         .code(HttpStatus.OK.value())
         .result(result)
+        .build();
+  }
+
+  @PostMapping("/login")
+  public APIResponse<JwtResponse> signIn(@RequestBody final LoginRequest loginRequest) {
+
+    JwtResponse jwtResponse = userService.authenticate(loginRequest);
+
+    return APIResponse.<JwtResponse>builder()
+        .code(HttpStatus.OK.value())
+        .result(jwtResponse)
         .build();
   }
 }

@@ -1,9 +1,18 @@
 package com.lily.backend.user;
 
-
+import com.lily.backend.security.UserDetailsImpl;
+import com.lily.backend.security.jwt.JwtUtils;
 import com.lily.backend.user.dto.UserDto;
 import com.lily.backend.user.entity.User;
+import com.lily.backend.user.request.LoginRequest;
+import com.lily.backend.user.request.SignupRequest;
+import com.lily.backend.user.response.JwtResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -11,11 +20,21 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   @Autowired
+  private PasswordEncoder encoder;
+
+  @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
+  @Autowired
+  private JwtUtils jwtUtils;
 
   public UserDto register(SignupRequest signupForm) {
     User save = userRepository.save(map(signupForm));
     return UserDto.builder()
+        .id(save.getId())
         .name(save.getFirstName() + " " +save.getLastName())
         .email(save.getEmail())
         .build();
@@ -26,8 +45,23 @@ public class UserService {
         .firstName(form.getFirstName())
         .lastName(form.getLastName())
         .email(form.getEmail())
-        .password(form.getPassword())
+        .password(encoder.encode(form.getPassword()))
         .build();
   }
 
+  public JwtResponse authenticate(LoginRequest loginRequest) {
+    Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    String jwt = jwtUtils.generateJwtToken(authentication);
+
+    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+    return JwtResponse.builder()
+        .token(jwt)
+        .userId(userDetails.getId())
+        .name(userDetails.getUsername())
+        .email(userDetails.getEmail())
+        .build();
+  }
 }

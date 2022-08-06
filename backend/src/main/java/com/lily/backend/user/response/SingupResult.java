@@ -1,4 +1,4 @@
-package com.lily.backend.user;
+package com.lily.backend.user.response;
 
 import com.lily.backend.user.dto.UserDto;
 import lombok.Getter;

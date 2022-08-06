@@ -1,4 +1,4 @@
-package com.lily.backend.user;
+package com.lily.backend.user.request;
 
 import lombok.Getter;
 import lombok.Setter;
