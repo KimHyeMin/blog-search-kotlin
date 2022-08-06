@@ -1,13 +1,15 @@
 package com.lily.backend.common.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
-@Data
+@Getter
+@Setter
 @Builder
 public class APIResponse<T> {
-  int code;
-  String errorMessage;
-  T result;
+  private int code;
+  private String errorMessage;
+  private T result;
 }

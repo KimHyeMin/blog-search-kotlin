@@ -1,6 +1,10 @@
 package com.lily.backend.search.client;
 
-import com.lily.backend.search.dto.BlogSearchRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lily.backend.search.request.BlogSearchRequest;
+import com.lily.backend.search.response.KakaoBlogSearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -18,13 +22,17 @@ public class KakaoBlogSearchClient implements BlogSearchClient {
   @Autowired
   private RestTemplate restTemplate;
 
+  @Autowired
+  private ObjectMapper objectMapper;
+
   @Value("${client.kakao.token}")
   private String clientToken;
 
   @Value("${client.kakao.url}")
   private String kakaoBlogSearchUrl;
 
-  public String search(final BlogSearchRequest request) {
+  public KakaoBlogSearchResponse search(final BlogSearchRequest request)
+      throws JsonProcessingException {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
     headers.set("Authorization", clientToken);
@@ -43,7 +51,9 @@ public class KakaoBlogSearchClient implements BlogSearchClient {
         entity,
         String.class);
 
-    return response.getBody();
+    final String body = response.getBody();
+
+    return objectMapper.readValue(body, new TypeReference<>(){});
   }
 
 }

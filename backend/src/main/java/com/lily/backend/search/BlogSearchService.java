@@ -1,8 +1,9 @@
 package com.lily.backend.search;
 
-import com.lily.backend.search.client.BlogSearchClient;
-import com.lily.backend.search.dto.BlogSearchRequest;
-import com.lily.backend.search.dto.BlogSearchResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.lily.backend.search.client.KakaoBlogSearchClient;
+import com.lily.backend.search.request.BlogSearchRequest;
+import com.lily.backend.search.response.KakaoBlogSearchResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,15 +12,13 @@ import org.springframework.stereotype.Service;
 public class BlogSearchService {
 
   @Autowired
-  private BlogSearchClient blogSearchClient;
+  private KakaoBlogSearchClient kakaoBlogSearchClient;
 
-  public BlogSearchResult searchBlogs(final BlogSearchRequest request) {
-    final String responseBody = blogSearchClient.search(request);
-    //todo parse response data
-    return BlogSearchResult
-        .builder()
-        .responseBody(responseBody)
-        .build();
+  public KakaoBlogSearchResponse searchBlogs(final BlogSearchRequest request)
+      throws JsonProcessingException {
+
+    //todo implement naver blog search with abstracting
+    return kakaoBlogSearchClient.search(request);
   }
 
 }

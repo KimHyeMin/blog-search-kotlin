@@ -1,7 +1,7 @@
-package com.lily.backend.search.dto;
+package com.lily.backend.search.request;
 
 
-public enum ResultSort {
+public enum SearchSort {
   ACCURACY,
   RECENCY;
 

@@ -18,7 +18,7 @@ public class UserController {
   private UserService userService;
 
   @PostMapping("/register")
-  public APIResponse<SingupResult> register(@RequestBody SignupRequest request) {
+  public APIResponse<SingupResult> register(@RequestBody final SignupRequest request) {
 
     UserDto newUser = userService.register(request);
 
