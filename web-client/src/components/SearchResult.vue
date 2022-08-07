@@ -1,11 +1,12 @@
 <template>
   <div class="search-result">
-    <div class="result-meta">검색결과 약 551,000개 (0.42초) </div>
-    <blog-card  title="블로그 글 제목dddddddddddddddddddddddddddddddddddddddddddddddddddddaggg"
-                sub-title="블로그 글 요약"
-                link="https://brunch.co.kr/@tourism/91"
-                thumbnail="http://search3.kakaocdn.net/argon/130x130_85_c/7r6ygzbvBDc"
-                footer="블로그의 이름">
+    <div class="result-meta">검색결과 약 {{ count }}개 (0.42초) </div>
+    <blog-card  v-for="(blog,idx) in blogList" :key="idx"
+                :title="blog.title"
+                :sub-title="blog.contents"
+                :link="blog.url"
+                :thumbnail="blog.thumbnail"
+                :footer="blog.blogName">
     </blog-card>
   </div>
 </template>
@@ -17,6 +18,19 @@ export default {
   name: "SearchResult",
   components: {
     BlogCard
+  },
+  data() {
+    return {
+
+    }
+  },
+  computed: {
+    count() {
+      return this.$store.state.$search.meta.totalCount || 0;
+    },
+    blogList() {
+      return this.$store.state.$search.blogList || [];
+    }
   }
 }
 </script>

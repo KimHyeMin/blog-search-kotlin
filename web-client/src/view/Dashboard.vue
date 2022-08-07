@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     searched(){
-      return !!this.$store.state.$search.results
+      return this.$store.getters.resultExist
     }
   },
   methods: {

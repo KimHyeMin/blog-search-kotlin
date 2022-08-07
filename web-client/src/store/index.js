@@ -3,6 +3,7 @@ import Vue from 'vue';
 import auth from './auth.js'
 import search from './search.js'
 
+
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -12,17 +13,34 @@ const store = new Vuex.Store({
     },
     state() {
       return {
-        userName: "김혜민"
+        user: null,
+        isAuthenticated: false,
+        token: null
       }
     },
     mutations: {
-
+      setUser(state, result) {
+        state.token = result.token;
+        state.user = result.user;
+        state.isAuthenticated = true;
+      }
     },
     actions: {
 
     },
     getters: {
-
+      userName(state) {
+        return state.user === null ? "" : state.user.name;
+      },
+      isAuthenticated(state) {
+        return state.isAuthenticated;
+      },
+      getAccessToken: function (state) {
+        return state.token
+      },
+      resultExist(state) {
+        return !!state.$search.blogList;
+      }
     },
 });
 

@@ -1,10 +1,12 @@
 import axios from 'axios'
 
-const axiosService = axios.create({
-    headers: {
+import { setInterceptors } from '@/utils/interceptors';
 
-    }
+const axiosService = axios.create({
+
 });
+
+setInterceptors(axiosService);
 
 const API_URL = '/api/v1/search/'
 

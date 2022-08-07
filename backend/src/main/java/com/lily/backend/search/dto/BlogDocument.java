@@ -15,6 +15,8 @@ public class BlogDocument {
 
   private String title;
 
+  private String contents;
+
   private String url;
 
   private String thumbnail;

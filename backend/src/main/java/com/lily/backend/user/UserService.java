@@ -59,9 +59,11 @@ public class UserService {
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
     return JwtResponse.builder()
         .token(jwt)
-        .userId(userDetails.getId())
-        .name(userDetails.getUsername())
-        .email(userDetails.getEmail())
+        .user(UserDto.builder()
+            .email(userDetails.getEmail())
+            .name(userDetails.getUsername())
+            .id(userDetails.getId())
+            .build())
         .build();
   }
 }

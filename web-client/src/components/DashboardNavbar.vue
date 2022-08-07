@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     userName() {
-      return this.$store.state.userName;
+      return this.$store.getters.userName;
     }
   },
   methods: {

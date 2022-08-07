@@ -11,3 +11,25 @@ export class SignUpForm {
   }
 }
 
+
+export class User {
+    constructor(id, name, email) {
+      this.id = id;
+      this.name = name;
+      this.email = email;
+    }
+}
+
+export class SearchRequest {
+  constructor(keywords, page, sort, size) {
+    this.keywords = keywords;
+    this.page = page;
+    this.sort = sort
+    this.size = size;
+  }
+
+  static default() {
+    return new SearchRequest('', 1, 'ACCURACY', 30)
+  }
+}
+

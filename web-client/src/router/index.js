@@ -8,8 +8,18 @@ import Favorites from '../components/Favorites.vue'
 import Popular from '../components/Popular.vue'
 import Form from '../components/SignUpForm.vue'
 import Success from '../components/Success.vue'
-
+import store from '../store'
 Vue.use(VueRouter)
+
+const beforeAuth = isAuth => (from, to, next) => {
+    const isAuthenticated = store.getters["isAuthenticated"]
+    if ((isAuthenticated && isAuth) || (!isAuthenticated && !isAuth)) {
+        return next()
+    } else {
+        // 홈 화면으로 이동
+        next("/login")
+    }
+}
 
 const router = new VueRouter({
     routes: [
@@ -32,11 +42,13 @@ const router = new VueRouter({
                     name: "Popular",
                     component: Popular
                 }
-            ]
+            ],
+            beforeEnter: beforeAuth(true)
         },
         {
           path: "/login",
-          component: Login
+          component: Login,
+          beforeEnter: beforeAuth(false)
         },
         {
             path: "/signup",
@@ -52,7 +64,8 @@ const router = new VueRouter({
                     name: 'Success',
                     component: Success
                 }
-            ]
+            ],
+            beforeEnter: beforeAuth(false)
         },
 
     ],

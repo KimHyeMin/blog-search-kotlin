@@ -64,7 +64,10 @@ export default {
   methods: {
     signIn() {
       //todo validation input
-
+      this.$store.dispatch("$auth/login", {email: this.email, password: this.password})
+          .then(()=> {
+            this.$router.push('/');
+          });
     }
   }
 }

@@ -6,10 +6,20 @@
           <div class="input-group-prepend">
             <span class="input-group-text bg-white"> <b-icon icon="search"></b-icon></span>
           </div>
-          <b-input placeholder="Search" type="text" v-model="keyword" @keyup.enter="search"></b-input>
+          <b-input placeholder="Search" type="text" v-model="searchRequest.keywords" @keyup.enter="search"></b-input>
         </b-input-group>
+
         <div class="condition-group">
-          <b-dropdown size="sm" :text="sort" class="m-2" variant="success">
+
+          <div class="pagination" >
+            <b-pagination v-if="exist"
+                          first-number align="fill"
+                          :per-page="searchRequest.size" :total-rows="total" v-model="searchRequest.page"
+                          @change="search">
+            </b-pagination>
+          </div>
+
+          <b-dropdown size="sm" :text="searchRequest.sort" variant="success" class="sorting-dropdown">
             <b-dropdown-item @click="changeSortingOption('ACCURACY')">ACCURACY</b-dropdown-item>
             <b-dropdown-item @click="changeSortingOption('RECENCY')">RECENCY</b-dropdown-item>
           </b-dropdown>
@@ -21,33 +31,44 @@
 
 <script>
 import Dashboard from "@/view/Dashboard";
+import { mapState } from "vuex"
+
 export default {
   name: "Search",
   data() {
     return {
-      keyword : "",
-      sort: "ACCURACY",
-      page: 1,
-      size: 30,
+      total: 1000,
+      sortingOpt : [
+        'ACCURACY', 'RECENCY'
+      ]
     }
+  },
+  computed: {
+    ...mapState("$search", ["searchRequest"]),
+    exist(){
+      return this.$store.getters.resultExist
+    },
   },
   methods: {
     search() {
-      //todo validation
-      let param = {"keywords" : this.keyword, "sort": this.sort, page: this.page, size:this.size }
-      this.$store.dispatch("$search/search", param)
-           .then(() => {
-              if (this.$router.currentRoute.name !== Dashboard.name) {
-                this.$router.push("/")
-              }
-           })
+      //todo validation input
+
+      if (!this.searchRequest.keywords) {
+        //init result, view
+        this.$store.commit("$search/init")
+      } else {
+        this.$store.dispatch("$search/search", this.searchRequest)
+      }
+      if (this.$router.currentRoute.name !== Dashboard.name) {
+        this.$router.push("/")
+      }
     },
     changeSortingOption(value) {
-      if (this.sort !== value) {
-        this.sort = value;
+      if (this.searchRequest.sort !== value) {
+        this.searchRequest.sort = value;
         this.search();
       }
-    }
+    },
   }
 }
 </script>
@@ -59,8 +80,14 @@ export default {
 }
 
 .condition-group {
-  text-align: right;
-  display: block;
+  margin-top: 0.5rem!important;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.sorting-dropdown {
+  height: fit-content;
 }
 
 

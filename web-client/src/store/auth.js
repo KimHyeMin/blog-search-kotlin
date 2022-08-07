@@ -1,4 +1,5 @@
-import { callRegister } from '@/module/auth'
+import { callRegister, callLogin } from '@/module/auth'
+import store  from '../store'
 
 const auth = {
         namespaced: true,
@@ -23,6 +24,20 @@ const auth = {
                     error => {
                         commit('failure')
                         return Promise.reject(error.response.data)
+                    }
+                )
+            },
+            login({commit}, loginForm) {
+                return callLogin(loginForm).then(
+                    response => {
+                      let apiRes = response.data;
+                      let result = apiRes.result;
+                      commit('success')
+                      store.commit('setUser', result)
+                      return Promise.resolve(response.data)
+                    },
+                    error => {
+                      return Promise.reject(error.response.data)
                     }
                 )
             }

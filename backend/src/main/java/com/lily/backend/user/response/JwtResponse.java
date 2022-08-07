@@ -1,6 +1,7 @@
 package com.lily.backend.user.response;
 
 
+import com.lily.backend.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,8 +11,6 @@ import lombok.Getter;
 public class JwtResponse {
 
   private String token;
-  private Long userId;
-  private String name;
-  private String email;
+  private UserDto user;
 
 }
