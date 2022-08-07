@@ -1,8 +1,8 @@
 package com.lily.backend.search;
 
 import com.lily.backend.common.dto.APIResponse;
+import com.lily.backend.search.dto.BlogSearchResult;
 import com.lily.backend.search.request.BlogSearchRequest;
-import com.lily.backend.search.response.KakaoBlogSearchResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,20 +24,20 @@ public class BlogSearchController {
   @GetMapping(
       value = "/blogs",
       produces = MediaType.APPLICATION_JSON_VALUE)
-  public APIResponse<KakaoBlogSearchResponse> searchBlogs(@ModelAttribute final BlogSearchRequest request) {
+  public APIResponse<BlogSearchResult> searchBlogs(@ModelAttribute final BlogSearchRequest request) {
     //todo keywords validation
 
     try {
-      final KakaoBlogSearchResponse result = blogSearchService.searchBlogs(request);
+      final BlogSearchResult result = blogSearchService.searchBlogs(request);
 
-      return APIResponse.<KakaoBlogSearchResponse>builder()
+      return APIResponse.<BlogSearchResult>builder()
           .code(HttpStatus.OK.value())
           .result(result)
           .build();
     } catch (Exception e) {
       log.error("Exception occurred on search blogs API. e: ", e);
       //todo Exception handling here or create common exception handling controller
-      return APIResponse.<KakaoBlogSearchResponse>builder()
+      return APIResponse.<BlogSearchResult>builder()
           .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
           .build();
     }

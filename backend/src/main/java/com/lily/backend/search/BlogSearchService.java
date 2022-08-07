@@ -1,24 +1,46 @@
 package com.lily.backend.search;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.lily.backend.search.client.KakaoBlogSearchClient;
+import com.lily.backend.search.client.BlogSearchClient;
+import com.lily.backend.search.client.KakaoBlogSearchSource;
+import com.lily.backend.search.client.NaverBlogSearchSource;
+import com.lily.backend.search.dto.BlogSearchResult;
 import com.lily.backend.search.request.BlogSearchRequest;
-import com.lily.backend.search.response.KakaoBlogSearchResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+@Slf4j
 @Service
 public class BlogSearchService {
 
   @Autowired
-  private KakaoBlogSearchClient kakaoBlogSearchClient;
+  private BlogSearchClient blogSearchClient;
 
-  public KakaoBlogSearchResponse searchBlogs(final BlogSearchRequest request)
-      throws JsonProcessingException {
+  @Autowired
+  private KakaoBlogSearchSource kakaoBlogSearchSource;
 
-    //todo implement naver blog search with abstracting
-    return kakaoBlogSearchClient.search(request);
+  @Autowired
+  private NaverBlogSearchSource naverBlogSearchSource;
+
+  public BlogSearchResult searchBlogs(final BlogSearchRequest request) {
+    String errorMessage = "";
+
+    try {
+      return blogSearchClient.search(kakaoBlogSearchSource, request);
+    } catch (Exception e) {
+      log.error("Kakao Search Exception: ", e);
+      errorMessage += "Kakao Search Exception: " + e.getMessage();
+    }
+
+    try {
+      return blogSearchClient.search(naverBlogSearchSource, request);
+    } catch (Exception e) {
+      log.error("Naver Search Exception: ", e);
+      errorMessage += ", Naver Search Exception: " + e.getMessage();
+    }
+
+    throw new RuntimeException(errorMessage);
   }
 
 }

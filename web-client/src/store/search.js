@@ -10,7 +10,7 @@ const search = {
         }),
         mutations: {
           success(state, result) {
-            state.blogList = result.documents;
+            state.blogList = result.blogList;
             state.meta = result.metaData;
           },
           failure(state) {
@@ -19,6 +19,7 @@ const search = {
           init(state) {
             state.blogList = null;
             state.meta = null;
+            state.searchRequest = SearchRequest.default();
           }
         },
         actions: {
