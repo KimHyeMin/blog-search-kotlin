@@ -1,11 +1,12 @@
 package com.lily.backend.search.client;
 
 import com.lily.backend.search.dto.BlogDocument;
-import com.lily.backend.search.dto.MetaData;
+import com.lily.backend.search.dto.SearchMeta;
 import com.lily.backend.search.request.BlogSearchRequest;
 import com.lily.backend.search.request.SearchSort;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,18 @@ public class NaverBlogSearchSource implements BlogSearchSource {
 
 
   @Override
+  public String getUrlTemplate() {
+    return UriComponentsBuilder.fromHttpUrl(naverBlogSearchUrl)
+        .queryParam("query", "{query}")
+        .queryParam("sort", "{sort}")
+        .queryParam("start", "{start}")
+        .queryParam("display", "{display}")
+        .encode()
+        .toUriString();
+  }
+
+
+  @Override
   public HttpHeaders getHttpHeaders(BlogSearchRequest request) {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -45,27 +58,29 @@ public class NaverBlogSearchSource implements BlogSearchSource {
 
   String sortToQueryParam(final SearchSort sort) {
     return switch (sort) {
-      case RECENCY -> "sim";
-      case ACCURACY -> "date";
+      case RECENCY -> "date";
+      case ACCURACY -> "sim";
     };
   }
 
   @Override
-  public UriComponentsBuilder getUriComponentsBuilder(BlogSearchRequest request) {
-    return UriComponentsBuilder.fromHttpUrl(naverBlogSearchUrl)
-        .queryParam("query", request.getKeywords())
-        .queryParam("sort", sortToQueryParam(request.getSort()))
-        .queryParam("start", (request.getPage() - 1) * request.getSize() + 1)
-        .queryParam("display", request.getSize());
+  public Map<String, Object> getParameters(BlogSearchRequest request) {
+    Map<String, Object> parameters = new HashMap<>();
+    parameters.put("query", request.getKeywords());
+    parameters.put("sort", sortToQueryParam(request.getSort()));
+    parameters.put("start", (request.getPage() - 1) * request.getSize() + 1);
+    parameters.put("display", request.getSize());
+
+    return parameters;
   }
 
   @Override
-  public MetaData parseSearchMeta(Map<String, Object> json) {
+  public SearchMeta parseSearchMeta(Map<String, Object> json) {
     int total = (int) json.get("total");
     int start = (int) json.get("start");
     int display = (int) json.get("display");
 
-    MetaData searchMeta = new MetaData();
+    SearchMeta searchMeta = new SearchMeta();
     searchMeta.setTotalCount(total);
     searchMeta.setPageableCount(Math.min(total, MAX_SEARCH_START + MAX_SEARCH_SIZE));
     searchMeta.setIsEndPage(total <= start + display - 1);

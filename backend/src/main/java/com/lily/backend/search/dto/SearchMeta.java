@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MetaData {
+public class SearchMeta {
 
   private Integer totalCount;
 

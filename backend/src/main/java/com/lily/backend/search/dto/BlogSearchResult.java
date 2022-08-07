@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class BlogSearchResult {
 
-  private MetaData metaData;
+  private SearchMeta metaData;
 
   private List<BlogDocument> blogList;
 

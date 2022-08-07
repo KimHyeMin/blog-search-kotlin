@@ -1,11 +1,12 @@
 package com.lily.backend.search.client;
 
 import com.lily.backend.search.dto.BlogDocument;
-import com.lily.backend.search.dto.MetaData;
+import com.lily.backend.search.dto.SearchMeta;
 import com.lily.backend.search.request.BlogSearchRequest;
 import com.lily.backend.search.request.SearchSort;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,18 @@ public class KakaoBlogSearchSource implements BlogSearchSource {
   @Value("${client.kakao.url}")
   private String kakaoBlogSearchUrl;
 
+
+  @Override
+  public String getUrlTemplate() {
+    return UriComponentsBuilder.fromHttpUrl(kakaoBlogSearchUrl)
+        .queryParam("query", "{query}")
+        .queryParam("sort", "{sort}")
+        .queryParam("page", "{page}")
+        .queryParam("size", "{size}")
+        .encode()
+        .toUriString();
+  }
+
   @Override
   public HttpHeaders getHttpHeaders(BlogSearchRequest request) {
     HttpHeaders headers = new HttpHeaders();
@@ -32,40 +45,34 @@ public class KakaoBlogSearchSource implements BlogSearchSource {
     return headers;
   }
 
-  @Override
-  public UriComponentsBuilder getUriComponentsBuilder(BlogSearchRequest request) {
-    return UriComponentsBuilder
-        .fromHttpUrl(kakaoBlogSearchUrl)
-        .queryParam("query", request.getKeywords())
-        .queryParam("sort", sortToQueryParam(request.getSort()))
-        .queryParam("page", request.getPage())
-        .queryParam("size", request.getSize());
-  }
-
-  @Override
-  public MetaData parseSearchMeta(Map<String, Object> json) {
-    Map<String, Object> metaJson = ((Map<String, Object>) json.get("meta"));
-
-    MetaData searchMeta = new MetaData();
-    searchMeta.setTotalCount((int) metaJson.get("total_count"));
-    searchMeta.setPageableCount((int) metaJson.get("pageable_count"));
-    searchMeta.setIsEndPage((boolean) metaJson.get("is_end"));
-    return searchMeta;
-  }
-
-  @Override
-  public List<BlogDocument> parseBlogDocuments(Map<String, Object> json) {
-    return ((List<Map<String, String>>) json.get("documents"))
-        .stream()
-        .map(docJson -> parseBlogDocument(docJson))
-        .toList();
-  }
-
-  private String sortToQueryParam(final SearchSort sort) {
+  String sortToQueryParam(final SearchSort sort) {
     return sort.name().toLowerCase();
   }
 
-  private BlogDocument parseBlogDocument(final Map<String, String> docJson) {
+  @Override
+  public Map<String, Object> getParameters(BlogSearchRequest request) {
+    Map<String, Object> parameters = new HashMap<>();
+    parameters.put("query", request.getKeywords());
+    parameters.put("sort", sortToQueryParam(request.getSort()));
+    parameters.put("page", request.getPage());
+    parameters.put("size", request.getSize());
+
+    return parameters;
+  }
+
+  @Override
+  public SearchMeta parseSearchMeta(Map<String, Object> json) {
+    Map<String, Object> metaJson = ((Map<String, Object>) json.get("meta"));
+
+    SearchMeta searchMeta = new SearchMeta();
+    searchMeta.setTotalCount((int) metaJson.get("total_count"));
+    searchMeta.setPageableCount((int) metaJson.get("pageable_count"));
+    searchMeta.setIsEndPage((boolean) metaJson.get("is_end"));
+
+    return searchMeta;
+  }
+
+  BlogDocument parseBlogDocument(final Map<String, String> docJson) {
     BlogDocument doc = new BlogDocument();
 
     doc.setTitle(docJson.getOrDefault("title", ""));
@@ -80,6 +87,14 @@ public class KakaoBlogSearchSource implements BlogSearchSource {
     }
 
     return doc;
+  }
+
+  @Override
+  public List<BlogDocument> parseBlogDocuments(Map<String, Object> json) {
+    return ((List<Map<String, String>>) json.get("documents"))
+        .stream()
+        .map(docJson -> parseBlogDocument(docJson))
+        .toList();
   }
 
 }
