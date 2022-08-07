@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import auth from './auth.js'
 import search from './search.js'
-
+import {setAuthToCookie, setUserToCookie, getUserFromCookie, getAuthFromCookie, deleteCookie} from '@/utils/cookies.js'
 
 Vue.use(Vuex);
 
@@ -13,9 +13,9 @@ const store = new Vuex.Store({
     },
     state() {
       return {
-        user: null,
-        isAuthenticated: false,
-        token: null
+        user: getUserFromCookie() || null,
+        isAuthenticated: !!getAuthFromCookie() || false,
+        token: getAuthFromCookie() || null
       }
     },
     mutations: {
@@ -23,6 +23,14 @@ const store = new Vuex.Store({
         state.token = result.token;
         state.user = result.user;
         state.isAuthenticated = true;
+        setAuthToCookie(state.token);
+        setUserToCookie(state.user);
+      },
+      expireUser(state) {
+        state.user = null;
+        state.isAuthenticated = false;
+        state.token = null;
+        deleteCookie();
       }
     },
     actions: {

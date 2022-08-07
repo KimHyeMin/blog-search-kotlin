@@ -40,6 +40,10 @@ const auth = {
                       return Promise.reject(error.response.data)
                     }
                 )
+            },
+            logout({commit}) {
+              store.commit('expireUser')
+              commit('success')
             }
         }
 }

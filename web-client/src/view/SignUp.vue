@@ -21,7 +21,6 @@ export default {
 
 .signUp {
   margin-top: 60px;
-  width: 80%;
   min-width: 600px;
 }
 </style>
