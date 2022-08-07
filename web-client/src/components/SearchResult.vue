@@ -1,12 +1,8 @@
 <template>
   <div class="search-result">
-    <div class="result-meta">검색결과 약 {{ count }}개 (0.42초) </div>
+    <div class="result-meta">검색결과 약 {{ count }}개 </div>
     <blog-card  v-for="(blog,idx) in blogList" :key="idx"
-                :title="blog.title"
-                :sub-title="blog.contents"
-                :link="blog.url"
-                :thumbnail="blog.thumbnail"
-                :footer="blog.blogName">
+                v-bind:blog="blog">
     </blog-card>
   </div>
 </template>

@@ -43,6 +43,7 @@ const auth = {
             },
             logout({commit}) {
               store.commit('expireUser')
+              store.commit('$search/init')
               commit('success')
             }
         }

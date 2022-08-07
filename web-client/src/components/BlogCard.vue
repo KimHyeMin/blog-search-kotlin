@@ -1,21 +1,21 @@
 <template>
-  <div class="favorite mt-4 mb-4">
+  <div class="blog-card mt-4 mb-4">
     <b-card
         no-body
         class="card-lift--hover shadow">
       <b-card-header class="bg-white">
         <div class="head-wrap">
-          <b-img thumbnail fluid :src="thumbnail" v-bind="mainProps"></b-img>
-          <h5 class="card-title text-uppercase text-muted mb-0 pt-2" v-if="title">
-            <b-link target="_blank" class="title" :href="link">{{title}}</b-link>
+          <b-img thumbnail fluid :src="blog.thumbnail" v-bind="mainProps"></b-img>
+          <h5 class="card-title text-uppercase text-muted mb-0 pt-2" v-if="blog.title">
+            <b-link target="_blank" class="title" :href="blog.url">{{blog.title}}</b-link>
           </h5>
         </div>
       </b-card-header>
       <b-card-body>
         <b-row>
           <b-col>
-              <div class="mb-3 mt-3 sub-title" v-if="subTitle">
-                <span>{{subTitle}}</span>
+              <div class="mb-3 mt-3 sub-title" v-if="blog.contents">
+                <span>{{blog.contents}}</span>
               </div>
           </b-col>
 
@@ -27,11 +27,16 @@
             </slot>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col>
+            <span class="time">created at {{blog.datetime}}</span>
+          </b-col>
+        </b-row>
       </b-card-body>
 
       <b-card-footer class="bg-white">
         <div class="footer">
-          <span class="text-success mr-2">{{footer}}</span>
+          <span class="text-success mr-2">{{blog.blogName}}</span>
           <div class="icon-wrap h5"><b-icon :icon="icon" @click="clickLike"></b-icon></div>
         </div>
       </b-card-footer>
@@ -41,13 +46,9 @@
 
 <script>
 export default {
-  name: "Favorite",
+  name: "BlogCard",
   props: {
-    title: String,
-    subTitle: String,
-    link:String,
-    thumbnail:String,
-    footer:String
+    blog: Object
   },
   data() {
     return {
@@ -106,4 +107,5 @@ export default {
 .card-footer {
   border-top: 0px;
 }
+
 </style>

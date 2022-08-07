@@ -37,17 +37,19 @@ export default {
   name: "Search",
   data() {
     return {
-      total: 1000,
       sortingOpt : [
         'ACCURACY', 'RECENCY'
       ]
     }
   },
   computed: {
-    ...mapState("$search", ["searchRequest"]),
+    ...mapState("$search", ["searchRequest", "meta"]),
     exist(){
       return this.$store.getters.resultExist
     },
+    total() {
+      return this.meta.pageableCount;
+    }
   },
   methods: {
     search() {
