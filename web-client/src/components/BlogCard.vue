@@ -5,7 +5,7 @@
         class="card-lift--hover shadow">
       <b-card-header class="bg-white">
         <div class="head-wrap">
-          <b-img thumbnail fluid :src="blog.thumbnail" v-bind="mainProps"></b-img>
+          <b-img thumbnail fluid :src="blog.thumbnail"  v-bind="mainProps" :blank=!blog.thumbnail></b-img>
           <h5 class="card-title text-uppercase text-muted mb-0 pt-2" v-if="blog.title">
             <b-link target="_blank" class="title" :href="blog.url">{{blog.title}}</b-link>
           </h5>
@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      mainProps: { blank: true, blankColor: '#777', width: 75, height: 75, class: 'm1 mr-10' },
+      mainProps: { blankColor: '#777', width: 75, height: 75, class: 'm1 mr-10' },
       like : true,
       icon : "heart-fill"
     }
