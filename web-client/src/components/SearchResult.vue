@@ -1,6 +1,15 @@
 <template>
   <div class="search-result">
     <div class="result-meta">검색결과 약 {{ count }}개 </div>
+
+    <div class="pagination" >
+      <b-pagination v-if="exist"
+                    first-number align="fill"
+                    :per-page="searchRequest.size" :total-rows="total" v-model="searchRequest.page"
+                    @change="search">
+      </b-pagination>
+    </div>
+
     <blog-card  v-for="(blog,idx) in blogList" :key="idx"
                 v-bind:blog="blog"
                 @like="addFavorite(blog)"
@@ -11,6 +20,7 @@
 
 <script>
 import BlogCard from "@/components/BlogCard";
+import {mapState} from "vuex";
 
 export default {
   name: "SearchResult",
@@ -23,12 +33,19 @@ export default {
     }
   },
   computed: {
+    ...mapState("$search", ["searchRequest", "meta"]),
     count() {
       return this.$store.state.$search.meta.totalCount || 0;
     },
     blogList() {
       return this.$store.state.$search.blogList || [];
-    }
+    },
+    exist(){
+      return this.$store.getters.resultExist
+    },
+    total() {
+      return this.meta.pageableCount;
+    },
   },
   methods: {
     addFavorite(blog) {
@@ -38,6 +55,9 @@ export default {
       }
       this.$store.dispatch("$favorite/like", {blog:blog, userId:userId})
       this.$set(blog);
+    },
+    search() {
+      this.$store.dispatch("$search/search", this.searchRequest)
     }
   }
 }
@@ -50,6 +70,10 @@ export default {
 }
 
 .result-meta {
+  margin-top: 15px;
+}
+
+.pagination {
   margin-top: 15px;
 }
 </style>

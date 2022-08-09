@@ -8,15 +8,6 @@
     </b-input-group>
 
     <div class="condition-group">
-
-      <div class="pagination" >
-        <b-pagination v-if="exist"
-                      first-number align="fill"
-                      :per-page="searchRequest.size" :total-rows="total" v-model="searchRequest.page"
-                      @change="search">
-        </b-pagination>
-      </div>
-
       <b-dropdown size="sm" :text="searchRequest.sort" variant="success" class="sorting-dropdown">
         <b-dropdown-item @click="changeSortingOption('ACCURACY')">ACCURACY</b-dropdown-item>
         <b-dropdown-item @click="changeSortingOption('RECENCY')">RECENCY</b-dropdown-item>
@@ -40,13 +31,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("$search", ["searchRequest", "meta"]),
-    exist(){
-      return this.$store.getters.resultExist
-    },
-    total() {
-      return this.meta.pageableCount;
-    }
+    ...mapState("$search", ["searchRequest"]),
   },
   methods: {
     search() {
@@ -80,9 +65,8 @@ export default {
 
 .condition-group {
   margin-top: 0.5rem!important;
-  display: flex;
+  text-align: right;
   width: 100%;
-  justify-content: space-between;
 }
 
 .sorting-dropdown {

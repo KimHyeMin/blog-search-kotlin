@@ -20,7 +20,7 @@ const search = {
             state.blogList = null;
             state.meta = null;
             state.searchRequest = SearchRequest.default();
-          }
+          },
         },
         actions: {
             search({ commit }, param) {
