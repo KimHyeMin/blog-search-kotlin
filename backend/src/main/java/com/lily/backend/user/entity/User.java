@@ -1,6 +1,7 @@
 package com.lily.backend.user.entity;
 
 
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,9 +23,9 @@ import lombok.NoArgsConstructor;
 public class User {
 
   @Id
+  @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
+  private Long userId;
   @Column
   private String firstName;
   @Column
@@ -33,4 +34,6 @@ public class User {
   private String email;
   @Column
   private String password;
+  @Column
+  private LocalDateTime registeredAt;
 }

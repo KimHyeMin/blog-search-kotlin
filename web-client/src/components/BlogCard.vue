@@ -29,7 +29,7 @@
         </b-row>
         <b-row>
           <b-col>
-            <span class="time">created at {{blog.datetime}}</span>
+            <span class="time">WrittenAt at {{blog.datetime}}</span>
           </b-col>
         </b-row>
       </b-card-body>
@@ -37,7 +37,7 @@
       <b-card-footer class="bg-white">
         <div class="footer">
           <span class="text-success mr-2">{{blog.blogName}}</span>
-          <div class="icon-wrap h5"><b-icon :icon="icon" @click="clickLike"></b-icon></div>
+          <div class="icon-wrap h5"><b-icon :icon="getIcon" @click="clickLike(blog)"></b-icon></div>
         </div>
       </b-card-footer>
     </b-card>
@@ -53,21 +53,37 @@ export default {
   data() {
     return {
       mainProps: { blankColor: '#777', width: 75, height: 75, class: 'm1 mr-10' },
-      like : true,
-      icon : "heart-fill"
+    }
+  },
+  computed: {
+    getIcon() {
+      return this.blog.like ? 'heart-fill' : 'heart'
     }
   },
   methods: {
-    clickLike() {
-      //todo implements
-
-      if (this.like) {
-        this.like = false;
-        this.icon = "heart";
+    clickLike(blog) {
+      let toast = {}
+      if (blog.like) {
+        blog.like = false;
+        this.$emit('unlike', blog)
+        toast.variant = "danger"
+        toast.type = "removed"
+        toast.message = "Your favorite is removed from your favorite list."
       } else {
-        this.like = true;
-        this.icon = "heart-fill";
+        blog.like = true;
+        this.$emit('like', blog)
+        toast.variant = "success"
+        toast.type = "added"
+        toast.message = "Your favorite is added to your favorite list. Please check favorite page"
       }
+
+      this.$bvToast.toast(toast.message, {
+            title: `My Favorite blog is ${toast.type}`,
+            variant: toast.variant,
+            solid: true,
+            appendToast: true
+          }
+      )
     }
   }
 }

@@ -2,7 +2,9 @@
   <div class="search-result">
     <div class="result-meta">검색결과 약 {{ count }}개 </div>
     <blog-card  v-for="(blog,idx) in blogList" :key="idx"
-                v-bind:blog="blog">
+                v-bind:blog="blog"
+                @like="addFavorite(blog)"
+    >
     </blog-card>
   </div>
 </template>
@@ -26,6 +28,16 @@ export default {
     },
     blogList() {
       return this.$store.state.$search.blogList || [];
+    }
+  },
+  methods: {
+    addFavorite(blog) {
+      let userId = this.$store.getters.userId;
+      if (!userId) {
+        return;
+      }
+      this.$store.dispatch("$favorite/like", {blog:blog, userId:userId})
+      this.$set(blog);
     }
   }
 }

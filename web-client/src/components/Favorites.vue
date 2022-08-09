@@ -1,17 +1,19 @@
 <template>
   <div class="favorites mt-50">
     <h4>My Favorites</h4>
-    <blog-card v-bind:blog="blog">
+    <blog-card v-for="(blog, index) in myList" :key="index"
+               v-bind:blog="blog"
+               @unlike="removeFavorite"
+    >
     </blog-card>
-
-    <blog-card v-bind:blog="blog">
-    </blog-card>
-
+    <button v-if="lastFavoriteId" type="button" class="btn btn-primary btn-lg btn-block" @click="fetchMore">Fetch more</button>
   </div>
 </template>
 
 <script>
 import BlogCard from "@/components/BlogCard";
+import { mapState } from "vuex"
+
 export default {
   name: "Favorites",
   components: {
@@ -19,14 +21,40 @@ export default {
   },
   data() {
     return {
-      blog: {
-        title: "블로그 글 제목dddddddddddddddddddddddddddddddddddddddddddddddddddddaggg",
-        contents: "블로그 글 요약",
-        url : "https://brunch.co.kr/@tourism/91",
-        thumbnail : "http://search3.kakaocdn.net/argon/130x130_85_c/7r6ygzbvBDc",
-        blogName: "블로그의 이름"
-      }
+
     }
+  },
+  computed: {
+    ...mapState("$favorite", ["myList", "lastFavoriteId"])
+  },
+  methods: {
+    removeFavorite(blog) {
+      let userId = this.$store.getters.userId;
+      let blogId = blog.favoriteId;
+      if (!userId || !blogId) {
+        return;
+      }
+      this.$store.dispatch("$favorite/unlike", {favoriteId:blogId, userId:userId});
+    },
+    fetchMore() {
+      let userId = this.$store.getters["userId"];
+      if (!userId) {
+        return;
+      }
+      let param = {userId : userId};
+      this.$store.dispatch("$favorite/fetchMore", param);
+    },
+    fetchMyList() {
+      let userId = this.$store.getters["userId"];
+      if (!userId) {
+        return;
+      }
+      let param = {userId : userId};
+      this.$store.dispatch("$favorite/fetchMyList", param);
+    }
+  },
+  mounted() {
+    this.fetchMyList();
   }
 }
 </script>

@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import auth from './auth.js'
 import search from './search.js'
+import favorite from './favorite.js'
 import {setAuthToCookie, setUserToCookie, getUserFromCookie, getAuthFromCookie, deleteCookie} from '@/utils/cookies.js'
 
 Vue.use(Vuex);
@@ -9,7 +10,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     modules: {
       $auth: auth,
-      $search: search
+      $search: search,
+      $favorite: favorite
     },
     state() {
       return {
@@ -37,6 +39,9 @@ const store = new Vuex.Store({
 
     },
     getters: {
+      userId(state) {
+        return state.user === null ? "" : state.user.id;
+      },
       userName(state) {
         return state.user === null ? "" : state.user.name;
       },

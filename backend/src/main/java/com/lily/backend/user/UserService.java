@@ -7,6 +7,7 @@ import com.lily.backend.user.entity.User;
 import com.lily.backend.user.request.LoginRequest;
 import com.lily.backend.user.request.SignupRequest;
 import com.lily.backend.user.response.JwtResponse;
+import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +35,7 @@ public class UserService {
   public UserDto register(SignupRequest signupForm) {
     User save = userRepository.save(map(signupForm));
     return UserDto.builder()
-        .id(save.getId())
+        .id(save.getUserId())
         .name(save.getFirstName() + " " +save.getLastName())
         .email(save.getEmail())
         .build();
@@ -46,6 +47,7 @@ public class UserService {
         .lastName(form.getLastName())
         .email(form.getEmail())
         .password(encoder.encode(form.getPassword()))
+        .registeredAt(LocalDateTime.now())
         .build();
   }
 
