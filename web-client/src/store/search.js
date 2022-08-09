@@ -1,4 +1,4 @@
-import { searchBlogs } from '@/module/searching'
+import { searchBlogs, getFrequentKeyword } from '@/module/searching'
 import { SearchRequest } from '@/models'
 
 const search = {
@@ -6,7 +6,8 @@ const search = {
         state: () => ({
           blogList: null,
           meta: null,
-          searchRequest: SearchRequest.default()
+          searchRequest: SearchRequest.default(),
+          keywordRanking:null
         }),
         mutations: {
           success(state, result) {
@@ -21,6 +22,9 @@ const search = {
             state.meta = null;
             state.searchRequest = SearchRequest.default();
           },
+          updateRanking(state, result) {
+            state.keywordRanking = result;
+          }
         },
         actions: {
             search({ commit }, param) {
@@ -35,7 +39,14 @@ const search = {
                         return Promise.reject(error.response.data)
                     }
                 )
-            }
+            },
+          fetchRanking({ commit }) {
+            return getFrequentKeyword().then(
+                response => {
+                  commit('updateRanking', response.data.result.list);
+                }
+            )
+          }
         }
 }
 

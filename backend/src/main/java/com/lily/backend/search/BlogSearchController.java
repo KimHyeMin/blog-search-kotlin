@@ -2,7 +2,10 @@ package com.lily.backend.search;
 
 import com.lily.backend.common.dto.APIResponse;
 import com.lily.backend.search.dto.BlogSearchResult;
+import com.lily.backend.search.dto.FrequentKeyword;
 import com.lily.backend.search.request.BlogSearchRequest;
+import com.lily.backend.search.response.FrequentResult;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +24,10 @@ public class BlogSearchController {
   @Autowired
   private BlogSearchService blogSearchService;
 
-  @GetMapping(
-      value = "/blogs",
-      produces = MediaType.APPLICATION_JSON_VALUE)
+  @Autowired
+  private FrequentKeywordService frequentKeywordService;
+
+  @GetMapping(value = "/blogs", produces = MediaType.APPLICATION_JSON_VALUE)
   public APIResponse<BlogSearchResult> searchBlogs(@ModelAttribute final BlogSearchRequest request) {
     //todo keywords validation
 
@@ -41,6 +45,16 @@ public class BlogSearchController {
           .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
           .build();
     }
+  }
+
+  @GetMapping(value = "/frequent/keywords", produces = MediaType.APPLICATION_JSON_VALUE)
+  public APIResponse<FrequentResult> getTopKeywords() {
+    List<FrequentKeyword> top10 = frequentKeywordService.getList();
+    FrequentResult result = new FrequentResult(top10);
+    return APIResponse.<FrequentResult>builder()
+        .code(HttpStatus.OK.value())
+        .result(result)
+        .build();
   }
 
 }

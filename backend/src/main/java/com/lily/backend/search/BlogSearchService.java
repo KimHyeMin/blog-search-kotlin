@@ -23,8 +23,12 @@ public class BlogSearchService {
   @Autowired
   private NaverBlogSearchSource naverBlogSearchSource;
 
+  @Autowired
+  private FrequentKeywordService frequentKeywordService;
+
   public BlogSearchResult searchBlogs(final BlogSearchRequest request) {
     String errorMessage = "";
+    frequentKeywordService.marking(request.getKeywords());
 
     try {
       return blogSearchClient.search(kakaoBlogSearchSource, request);

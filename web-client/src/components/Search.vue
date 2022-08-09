@@ -4,7 +4,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text bg-white"> <b-icon icon="search"></b-icon></span>
       </div>
-      <b-input placeholder="Search" type="text" v-model="searchRequest.keywords" @keyup.enter="search"></b-input>
+      <b-input placeholder="Search" type="text" v-model="searchRequest.keywords" @keypress.enter="search"></b-input>
     </b-input-group>
 
     <div class="condition-group">
@@ -21,27 +21,34 @@
 import Dashboard from "@/view/Dashboard";
 import { mapState } from "vuex"
 
+
 export default {
   name: "Search",
   data() {
     return {
       sortingOpt : [
         'ACCURACY', 'RECENCY'
-      ]
+      ],
+      searchCount : 0
     }
   },
   computed: {
     ...mapState("$search", ["searchRequest"]),
   },
   methods: {
-    search() {
+    search(event) {
       //todo validation input
+
+      if (event.isComposing || event.keyCode === 229) {
+        return;
+      }
 
       if (!this.searchRequest.keywords) {
         //init result, view
         this.$store.commit("$search/init")
       } else {
         this.$store.dispatch("$search/search", this.searchRequest)
+        this.searchCount ++
       }
       if (this.$router.currentRoute.name !== Dashboard.name) {
         this.$router.push("/")
