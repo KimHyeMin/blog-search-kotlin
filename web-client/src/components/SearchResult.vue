@@ -6,7 +6,7 @@
       <b-pagination v-if="exist"
                     first-number align="fill"
                     :per-page="searchRequest.size" :total-rows="total" v-model="searchRequest.page"
-                    @change="search">
+                    @change="search(false)">
       </b-pagination>
     </div>
 
@@ -56,7 +56,8 @@ export default {
       this.$store.dispatch("$favorite/like", {blog:blog, userId:userId})
       this.$set(blog);
     },
-    search() {
+    search(first) {
+      this.searchRequest['first'] = first;
       this.$store.dispatch("$search/search", this.searchRequest)
     }
   }

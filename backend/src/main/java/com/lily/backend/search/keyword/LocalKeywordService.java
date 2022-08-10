@@ -34,7 +34,6 @@ public class LocalKeywordService implements KeywordService {
 
   @Scheduled(fixedDelay = 1000)
   public void refreshMap() {
-    log.info("scheduling....");
     List<String> commitBuffer;
 
     synchronized (this) {
@@ -46,6 +45,7 @@ public class LocalKeywordService implements KeywordService {
       return;
     }
 
+    log.info("refresh ranking storage....");
     for (String keyword : commitBuffer) {
       FrequentKeyword frequentKeyword = storage.get(keyword);
       if (frequentKeyword == null) {

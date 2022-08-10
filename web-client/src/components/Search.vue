@@ -4,7 +4,7 @@
       <div class="input-group-prepend">
         <span class="input-group-text bg-white"> <b-icon icon="search"></b-icon></span>
       </div>
-      <b-input placeholder="Search" type="text" v-model="searchRequest.keywords" @keypress.enter="search"></b-input>
+      <b-input placeholder="Search" type="text" v-model="searchRequest.keywords" @keypress.enter="search(true)"></b-input>
     </b-input-group>
 
     <div class="condition-group">
@@ -36,17 +36,14 @@ export default {
     ...mapState("$search", ["searchRequest"]),
   },
   methods: {
-    search(event) {
+    search(first) {
       //todo validation input
-
-      if (event.isComposing || event.keyCode === 229) {
-        return;
-      }
 
       if (!this.searchRequest.keywords) {
         //init result, view
         this.$store.commit("$search/init")
       } else {
+        this.searchRequest['first'] = first;
         this.$store.dispatch("$search/search", this.searchRequest)
         this.searchCount ++
       }
@@ -57,7 +54,7 @@ export default {
     changeSortingOption(value) {
       if (this.searchRequest.sort !== value) {
         this.searchRequest.sort = value;
-        this.search();
+        this.search(false);
       }
     },
   }

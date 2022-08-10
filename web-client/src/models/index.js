@@ -21,15 +21,16 @@ export class User {
 }
 
 export class SearchRequest {
-  constructor(keywords, page, sort, size) {
+  constructor(keywords, page, sort, size, first) {
     this.keywords = keywords;
     this.page = page;
     this.sort = sort
     this.size = size;
+    this.first = first;
   }
 
   static default() {
-    return new SearchRequest('', 1, 'ACCURACY', 30)
+    return new SearchRequest('', 1, 'ACCURACY', 30, true)
   }
 }
 

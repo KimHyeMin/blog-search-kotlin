@@ -20,4 +20,6 @@ public class BlogSearchRequest {
   @Min(0) @Max(500)
   private int size = 30;
 
+  private boolean first = false; // Marking the ranking of keyword only when 'first' is true
+
 }

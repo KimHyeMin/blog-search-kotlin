@@ -27,9 +27,12 @@ public class BlogSearchService {
   private FrequentKeywordService frequentKeywordService;
 
   public BlogSearchResult searchBlogs(final BlogSearchRequest request) {
-    String errorMessage = "";
-    frequentKeywordService.marking(request.getKeywords());
 
+    if (request.isFirst()) {
+      frequentKeywordService.marking(request.getKeywords());
+    }
+
+    String errorMessage = "";
     try {
       return blogSearchClient.search(kakaoBlogSearchSource, request);
     } catch (Exception e) {
