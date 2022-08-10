@@ -51,6 +51,8 @@ public class FavoriteBlog {
   @Column
   private String url;
   @Column
+  private int urlHashCode;
+  @Column
   private LocalDateTime writtenAt;
   @Column
   private LocalDateTime createdAt;

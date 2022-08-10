@@ -20,4 +20,8 @@ public class BlogDto {
   public boolean getLike() {
     return favoriteId != null;
   }
+
+  public int getUrlHashCode() {
+    return url.hashCode();
+  }
 }

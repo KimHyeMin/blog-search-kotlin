@@ -1,6 +1,8 @@
 package com.lily.backend.blog;
 
+
 import com.lily.backend.blog.dto.BlogDto;
+import com.lily.backend.blog.dto.FavoriteBlogUrl;
 import com.lily.backend.blog.entity.FavoriteBlog;
 import com.lily.backend.common.exception.AuthenticateException;
 import com.lily.backend.common.exception.NoResourceFindException;
@@ -8,7 +10,9 @@ import com.lily.backend.common.utills.StringCompressUtil;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 
 @Slf4j
@@ -45,6 +50,7 @@ public class FavoriteBlogService {
         .content(contents)
         .thumbnail(blog.getThumbnail())
         .url(blog.getUrl())
+        .urlHashCode(blog.getUrlHashCode())
         .writtenAt(blog.getDatetime())
         .createdAt(LocalDateTime.now())
         .build();
@@ -92,5 +98,17 @@ public class FavoriteBlogService {
       log.error("Fail to delete favorite blog of user : {}, {}", blogId, e);
     }
     return false;
+  }
+
+  public Map<Integer, Long> findFavoriteIds(Long userId, List<Integer> urlHashCodes) {
+    List<FavoriteBlogUrl> result =  favoriteBlogRepository.findFavoriteIdMapByUserIdAndUrlHashCode(userId, urlHashCodes);
+
+    if (CollectionUtils.isEmpty(result)) {
+      return new HashMap<>();
+    }
+
+    return result
+          .stream()
+          .collect(Collectors.toMap(FavoriteBlogUrl::getUrlHashCode, FavoriteBlogUrl::getFavoriteId));
   }
 }

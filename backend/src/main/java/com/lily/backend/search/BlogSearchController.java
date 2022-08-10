@@ -5,6 +5,8 @@ import com.lily.backend.search.dto.BlogSearchResult;
 import com.lily.backend.search.dto.FrequentKeyword;
 import com.lily.backend.search.request.BlogSearchRequest;
 import com.lily.backend.search.response.FrequentResult;
+import com.lily.backend.security.CurrentUser;
+import com.lily.backend.security.UserDetailsImpl;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +30,11 @@ public class BlogSearchController {
   private FrequentKeywordService frequentKeywordService;
 
   @GetMapping(value = "/blogs", produces = MediaType.APPLICATION_JSON_VALUE)
-  public APIResponse<BlogSearchResult> searchBlogs(@ModelAttribute final BlogSearchRequest request) {
+  public APIResponse<BlogSearchResult> searchBlogs(@ModelAttribute final BlogSearchRequest request, @CurrentUser UserDetailsImpl user) {
     //todo keywords validation
 
     try {
-      final BlogSearchResult result = blogSearchService.searchBlogs(request);
+      final BlogSearchResult result = blogSearchService.searchBlogs(request, user);
 
       return APIResponse.<BlogSearchResult>builder()
           .code(HttpStatus.OK.value())

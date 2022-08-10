@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class BlogDocument {
 
+  private Long favoriteId;
+
   private String blogName;
 
   private String title;
@@ -20,5 +22,13 @@ public class BlogDocument {
   private String thumbnail;
 
   private LocalDateTime datetime;
+
+  public boolean getLike() {
+    return favoriteId != null;
+  }
+
+  public int getUrlHashCode() {
+    return url.hashCode();
+  }
 
 }

@@ -11,9 +11,9 @@ const favorite = {
       if (!favorites || favorites.length === 0) {
         state.lastFavoriteId = null;
       } else {
-        state.myList = favorites;
         state.lastFavoriteId = favorites.slice(-1)[0].favoriteId;
       }
+      state.myList = favorites;
     },
     appendList(state, favorites) {
       if (!favorites || favorites.length === 0) {

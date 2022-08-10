@@ -10,7 +10,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
 
 
 @Slf4j

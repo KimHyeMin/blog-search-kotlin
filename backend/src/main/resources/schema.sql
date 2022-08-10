@@ -19,6 +19,7 @@ CREATE TABLE favorites (
                         content VARCHAR(500),
                         thumbnail VARCHAR(255),
                         url VARCHAR(255),
+                        urlHashCode INTEGER,
                         writtenAt TIMESTAMP,
                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         PRIMARY KEY (`id`)
@@ -26,3 +27,4 @@ CREATE TABLE favorites (
 
 
 ALTER TABLE favorites ADD FOREIGN KEY (userId) REFERENCES users(id);
+CREATE INDEX urlHashCode ON favorites(userId, urlHashCode);
