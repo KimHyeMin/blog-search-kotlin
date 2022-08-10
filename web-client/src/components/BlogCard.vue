@@ -7,7 +7,7 @@
         <div class="head-wrap">
           <b-img thumbnail fluid :src="blog.thumbnail"  v-bind="mainProps" :blank=!blog.thumbnail></b-img>
           <h5 class="card-title text-uppercase text-muted mb-0 pt-2" v-if="blog.title">
-            <b-link target="_blank" class="title" :href="blog.url">{{blog.title}}</b-link>
+            <b-link target="_blank" class="title" :href="blog.url"><p v-html="blog.title"></p></b-link>
           </h5>
         </div>
       </b-card-header>
@@ -15,7 +15,7 @@
         <b-row>
           <b-col>
               <div class="mb-3 mt-3 sub-title" v-if="blog.contents">
-                <span>{{blog.contents}}</span>
+                <span v-html="blog.contents"></span>
               </div>
           </b-col>
 
