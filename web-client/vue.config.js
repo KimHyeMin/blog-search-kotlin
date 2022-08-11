@@ -1,7 +1,7 @@
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = {
-  outputDir: '../backend/src/main/resources/static',
+  outputDir: '../backend/blog-service/src/main/resources/static',
   devServer: {
     port: 9999,
     proxy: {

@@ -1,1 +1,5 @@
 rootProject.name = 'backend'
+
+include('blog-service')
+include('user-auth')
+include('trends')
