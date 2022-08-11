@@ -5,17 +5,17 @@
 
 ## Development
 ### Overall
-#####  backend 
+#####  [backend](https://github.com/KimHyeMin/blog-search/tree/main/backend)
 There is a backend code related to the blog search service.
 It consists of 3 modules.
 'blog-service' that in charge of the overall business service,
 'trend' module to manage the ranking of popular search terms,
 and 'user-auth' module that manages user authentication.
 
-#####  web-client
-This is SPA application.
+#####  [web-client](https://github.com/KimHyeMin/blog-search/tree/main/web-client)
 It is used when developing the frontend side of the blog service. 
 After development, bundle it and make a file in 'backend/blog-service/src/main/resources/static'.
+It is implemented in a SPA, each page rendered by a router.
 
 
 
