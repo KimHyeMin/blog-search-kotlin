@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -94,7 +95,7 @@ public class KakaoBlogSearchSource implements BlogSearchSource {
     return ((List<Map<String, String>>) json.get("documents"))
         .stream()
         .map(docJson -> parseBlogDocument(docJson))
-        .toList();
+        .collect(Collectors.toList());
   }
 
 }

@@ -9,6 +9,7 @@ import com.lily.blogservice.dto.BlogSearchResult;
 import com.lily.userauth.security.UserDetailsImpl;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,8 @@ public class BlogSearchService {
   }
 
   private void injectFavoriteBlogId(Long userId, List<BlogDocument> blogList) {
-    List<Integer> urlHashCodes = blogList.stream().map(BlogDocument::getUrlHashCode).toList();
+    List<Integer> urlHashCodes = blogList.stream().map(BlogDocument::getUrlHashCode).collect(
+        Collectors.toList());
 
     Map</* url hashcode*/Integer, /* favoriteId */Long> favoriteIdMap = favoriteBlogService.findFavoriteIds(userId, urlHashCodes);
 

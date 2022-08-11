@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -57,10 +58,14 @@ public class NaverBlogSearchSource implements BlogSearchSource {
   }
 
   String sortToQueryParam(final SearchSort sort) {
-    return switch (sort) {
-      case RECENCY -> "date";
-      case ACCURACY -> "sim";
-    };
+    switch (sort) {
+      case RECENCY:
+        return "date";
+      case ACCURACY:
+        return "sim";
+      default:
+        throw new RuntimeException("unknown sorting option");
+    }
   }
 
   @Override
@@ -110,7 +115,7 @@ public class NaverBlogSearchSource implements BlogSearchSource {
     return ((List<Map<String, String>>) json.get("items"))
         .stream()
         .map(docJson -> parseBlogDocument(docJson))
-        .toList();
+        .collect(Collectors.toList());
   }
 
 }
