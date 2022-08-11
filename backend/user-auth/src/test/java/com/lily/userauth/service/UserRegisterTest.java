@@ -1,6 +1,5 @@
 package com.lily.userauth.service;
 
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,9 +77,9 @@ class UserRegisterTest {
         .save(any(User.class));
 
     UserDto actual = dut.register(input);
-    assertEquals(actual.getName(), is(mockUser().getFirstName() + " " + mockUser().getLastName()));
-    assertEquals(actual.getEmail(), is(mockUser().getEmail()));
-    assertEquals(actual.getId(), is(mockUser().getUserId()));
+    assertEquals(actual.getName(), mockUser().getFirstName() + " " + mockUser().getLastName());
+    assertEquals(actual.getEmail(), mockUser().getEmail());
+    assertEquals(actual.getId(), mockUser().getUserId());
   }
 
   private SignupRequest mockInput() {
