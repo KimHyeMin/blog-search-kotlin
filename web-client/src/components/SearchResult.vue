@@ -10,9 +10,11 @@
       </b-pagination>
     </div>
 
-    <blog-card  v-for="(blog,idx) in blogList" :key="idx"
+    <blog-card  ref="resultCard"
+                v-for="(blog,idx) in blogList" :key="idx"
                 v-bind:blog="blog"
-                @like="addFavorite(blog)"
+                @like="addFavorite(blog, idx)"
+                @unlike="removeFavorite(blog, idx)"
     >
     </blog-card>
   </div>
@@ -48,18 +50,21 @@ export default {
     },
   },
   methods: {
-    addFavorite(blog) {
+    addFavorite(blog, idx) {
       let userId = this.$store.getters.userId;
       if (!userId) {
         return;
       }
 
+      this.$refs.resultCard[idx].buttonDisable = true;
+
       this.$store.dispatch("$favorite/like", {blog:blog, userId:userId})
-      .then(success => {
-        if (success) {
+      .then(result => {
+        if (result.success) {
+          blog.favoriteId = result.favoriteId;
           this.$set(blog);
           this.$bvToast.toast('Your favorite is added to your favorite list. Please check favorite page', {
-                title: 'My Favorite blog is added',
+                title: 'Like this blog',
                 variant: 'success',
                 solid: true,
                 appendToast: true
@@ -74,7 +79,45 @@ export default {
               }
           )
         }
+      }, () => console.log("add favorite failed"))
+      .finally(() => {
+          this.$refs.resultCard[idx].buttonDisable = false;
       })
+    },
+    removeFavorite(blog, idx) {
+      let userId = this.$store.getters.userId;
+      if (!userId) {
+        return;
+      }
+
+      this.$refs.resultCard[idx].buttonDisable = true;
+
+      this.$store.dispatch("$favorite/unlike", {favoriteId: blog.favoriteId, userId:userId})
+      .then(result => {
+        if (result.success) {
+          blog.favoriteId = null;
+          this.$set(blog);
+          this.$bvToast.toast('This blog removed from your favorite', {
+                title: 'Unlike this blog',
+                variant: 'warning',
+                solid: true,
+                appendToast: true
+              }
+          )
+        } else {
+          this.$bvToast.toast('removing favorite is failed', {
+                title: 'Failed.',
+                variant: 'danger',
+                solid: true,
+                appendToast: true
+              }
+          )
+        }
+      }, () => console.log("remove favorite failed"))
+      .finally(() => {
+        this.$refs.resultCard[idx].buttonDisable = false;
+      })
+
     },
     search(first) {
       this.searchRequest['first'] = first;

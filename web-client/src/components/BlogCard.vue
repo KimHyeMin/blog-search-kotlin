@@ -53,6 +53,7 @@ export default {
   data() {
     return {
       mainProps: { blankColor: '#777', width: 75, height: 75, class: 'm1 mr-10' },
+      buttonDisable: false
     }
   },
   computed: {
@@ -62,6 +63,10 @@ export default {
   },
   methods: {
     clickLike(blog) {
+      if (this.buttonDisable) {
+        return;
+      }
+
       if (blog.like) {
         blog.like = false;
         this.$emit('unlike', blog)

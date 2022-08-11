@@ -4,6 +4,7 @@ import com.lily.blogservice.dto.APIResponse;
 import com.lily.blogservice.dto.BlogDocument;
 import com.lily.blogservice.dto.FavoriteBlogResult;
 import com.lily.blogservice.dto.SimpleFavoriteResult;
+import com.lily.blogservice.repository.entity.FavoriteBlog;
 import com.lily.blogservice.service.FavoriteBlogService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,12 @@ public class FavoriteController {
   public APIResponse<SimpleFavoriteResult> addFavorite(@PathVariable Long userId,
       @RequestBody final BlogDocument blog) {
 
-    boolean success = favoriteBlogService.addFavorite(userId, blog);
+    FavoriteBlog saveBlog = favoriteBlogService.addFavorite(userId, blog);
 
-    SimpleFavoriteResult result = new SimpleFavoriteResult(success);
-
-    return APIResponse.success(result);
+    if (saveBlog != null) {
+      return APIResponse.success(SimpleFavoriteResult.with(saveBlog.getFavoriteId()));
+    }
+    return APIResponse.success(SimpleFavoriteResult.fail());
   }
 
   @GetMapping("/favorites/list")
@@ -51,7 +53,7 @@ public class FavoriteController {
 
     boolean success = favoriteBlogService.remove(userId, favoriteId);
 
-    SimpleFavoriteResult result = new SimpleFavoriteResult(success);
+    SimpleFavoriteResult result = SimpleFavoriteResult.with(favoriteId);
     return APIResponse.success(result);
   }
 

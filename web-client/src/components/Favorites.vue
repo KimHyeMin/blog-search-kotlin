@@ -35,8 +35,8 @@ export default {
         return;
       }
       this.$store.dispatch("$favorite/unlike", {favoriteId:blogId, userId:userId})
-      .then(success => {
-        if (success) {
+      .then(result => {
+        if (result.success) {
           this.$set(blog);
           this.$bvToast.toast('Your favorite is removed from your favorite list. Please check favorite page', {
                 title: 'My Favorite blog is removed',

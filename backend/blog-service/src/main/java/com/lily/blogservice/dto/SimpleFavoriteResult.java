@@ -13,5 +13,14 @@ import lombok.Setter;
 public class SimpleFavoriteResult {
 
   private boolean success;
+  private Long favoriteId;
 
+  public static SimpleFavoriteResult fail() {
+    return new SimpleFavoriteResult(false, null);
+  }
+
+
+  public static SimpleFavoriteResult with(Long favoriteId) {
+    return new SimpleFavoriteResult(true, favoriteId);
+  }
 }

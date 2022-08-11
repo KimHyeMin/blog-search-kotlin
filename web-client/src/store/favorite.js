@@ -62,7 +62,7 @@ const favorite = {
     like({ commit }, param) {
       return addFavorite(param).then(
           response => {
-            return Promise.resolve(response.data.result.success)
+            return Promise.resolve(response.data.result)
           },
           error => {
             commit('failure')
@@ -75,7 +75,7 @@ const favorite = {
           response => {
             if (response.data.code === 200) {
               commit('removeFavorite', param.favoriteId);
-              return Promise.resolve(response.data.result.success)
+              return Promise.resolve(response.data.result)
             } else {
               commit('failure')
               return Promise.resolve(response.data)

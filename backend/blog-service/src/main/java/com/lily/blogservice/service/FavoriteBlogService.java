@@ -29,14 +29,13 @@ public class FavoriteBlogService {
   @Autowired
   private FavoriteBlogRepository favoriteBlogRepository;
 
-  public boolean addFavorite(Long userId, BlogDocument blog) {
+  public FavoriteBlog addFavorite(Long userId, BlogDocument blog) {
     try {
-      favoriteBlogRepository.save(map(userId, blog));
-      return true;
+      return favoriteBlogRepository.save(map(userId, blog));
     } catch (Exception e) {
       log.error("Fail to save favorite blog of user : {}, {}", userId, e);
     }
-    return false;
+    return null;
   }
 
   private FavoriteBlog map(Long userId, BlogDocument blog) throws IOException {
@@ -109,6 +108,6 @@ public class FavoriteBlogService {
 
     return result
           .stream()
-          .collect(Collectors.toMap(FavoriteBlogUrl::getUrlHashCode, FavoriteBlogUrl::getFavoriteId));
+          .collect(Collectors.toMap(FavoriteBlogUrl::getUrlHashCode, FavoriteBlogUrl::getFavoriteId, (p1, p2) -> p1));
   }
 }
