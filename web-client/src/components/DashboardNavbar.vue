@@ -22,6 +22,8 @@
 
 <script>
 import Dashboard from "@/view/Dashboard";
+import Favorites from "@/components/Favorites";
+import Popular from "@/components/Popular";
 
 export default {
   name: "DashboardNavbar",
@@ -37,15 +39,21 @@ export default {
   },
   methods: {
     routeToFavorite() {
-      this.$router.push("favorite")
+      if (this.$router.currentRoute.name !== Favorites.name) {
+        this.$router.push("favorite")
+      }
     },
     routeToDashboard() {
+      this.$store.commit("$search/init")
       if (this.$router.currentRoute.name !== Dashboard.name) {
         this.$router.push("/")
       }
     },
     routeToPopular() {
-      this.$router.push("popular")
+      if (this.$router.currentRoute.name !== Popular.name) {
+        this.$router.push("popular")
+      }
+
     },
     signOut() {
       this.$store.dispatch("$auth/logout");
