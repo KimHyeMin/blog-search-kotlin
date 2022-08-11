@@ -21,7 +21,7 @@ public class ControllerExceptionHandler {
   public APIResponse invalidParameterException(final BindException ex) {
     log.warn("Bad Request: " + ex.getMessage());
     FieldError error = ex.getBindingResult().getFieldError();
-    String message = String.format("%s %s", error.getField(), error.getDefaultMessage());
+    String message = String.format("%s", error.getDefaultMessage());
     return APIResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .errorMessage(message)

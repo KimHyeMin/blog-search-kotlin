@@ -2,6 +2,7 @@ package com.lily.blogservice.service;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+import com.lily.blogservice.client.BlogSearchClient;
 import com.lily.blogservice.dto.BlogDocument;
 import com.lily.blogservice.dto.BlogSearchRequest;
 import com.lily.blogservice.dto.BlogSearchResult;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class BlogSearchService {
 
   @Autowired
-  private BlogSearchClientWrapper blogSearchClient;
+  private BlogSearchClient blogSearchClient;
 
   @Autowired
   private FrequentKeywordService frequentKeywordService;

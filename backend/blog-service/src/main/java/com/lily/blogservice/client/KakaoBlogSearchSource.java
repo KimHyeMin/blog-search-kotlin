@@ -10,26 +10,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
-@Component
+@Getter
+@AllArgsConstructor
 public class KakaoBlogSearchSource implements BlogSearchSource {
 
-  @Value("${client.kakao.token}")
   private String clientToken;
 
-  @Value("${client.kakao.url}")
-  private String kakaoBlogSearchUrl;
-
+  private String blogSearchUrl;
 
   @Override
   public String getUrlTemplate() {
-    return UriComponentsBuilder.fromHttpUrl(kakaoBlogSearchUrl)
+    return UriComponentsBuilder.fromHttpUrl(blogSearchUrl)
         .queryParam("query", "{query}")
         .queryParam("sort", "{sort}")
         .queryParam("page", "{page}")
@@ -39,19 +37,20 @@ public class KakaoBlogSearchSource implements BlogSearchSource {
   }
 
   @Override
-  public HttpHeaders getHttpHeaders(BlogSearchRequest request) {
+  public HttpHeaders getHttpHeaders() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
     headers.set("Authorization", clientToken);
     return headers;
   }
 
-  String sortToQueryParam(final SearchSort sort) {
+  @Override
+  public String sortToQueryParam(final SearchSort sort) {
     return sort.name().toLowerCase();
   }
 
   @Override
-  public Map<String, Object> getParameters(BlogSearchRequest request) {
+  public Map<String, Object> getParameters(final BlogSearchRequest request) {
     Map<String, Object> parameters = new HashMap<>();
     parameters.put("query", request.getKeywords());
     parameters.put("sort", sortToQueryParam(request.getSort()));
@@ -62,7 +61,7 @@ public class KakaoBlogSearchSource implements BlogSearchSource {
   }
 
   @Override
-  public SearchMeta parseSearchMeta(Map<String, Object> json) {
+  public SearchMeta parseSearchMeta(final Map<String, Object> json) {
     Map<String, Object> metaJson = ((Map<String, Object>) json.get("meta"));
 
     SearchMeta searchMeta = new SearchMeta();

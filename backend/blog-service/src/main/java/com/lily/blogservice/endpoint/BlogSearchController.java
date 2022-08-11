@@ -3,6 +3,7 @@ package com.lily.blogservice.endpoint;
 import com.lily.blogservice.dto.BlogSearchRequest;
 import com.lily.blogservice.dto.BlogSearchResult;
 import com.lily.blogservice.dto.FrequentResult;
+
 import com.lily.blogservice.service.BlogSearchService;
 import com.lily.blogservice.service.FrequentKeywordService;
 import com.lily.trends.dto.FrequentKeyword;

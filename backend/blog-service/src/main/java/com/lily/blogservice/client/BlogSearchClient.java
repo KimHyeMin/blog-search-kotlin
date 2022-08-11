@@ -1,8 +1,7 @@
-package com.lily.blogservice.service;
+package com.lily.blogservice.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lily.blogservice.client.BlogSearchSource;
 import com.lily.blogservice.dto.BlogDocument;
 import com.lily.blogservice.dto.BlogSearchRequest;
 import com.lily.blogservice.dto.BlogSearchResult;
@@ -12,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -22,14 +23,24 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class BlogSearchClient {
 
+  static private ObjectMapper mapper = new ObjectMapper();
+
   @Autowired
   private RestTemplate restTemplate;
 
-  static private ObjectMapper mapper = new ObjectMapper();
+  @Autowired
+  private KakaoBlogSearchSource kakaoBlogSearchSource;
 
-  public BlogSearchResult search(final BlogSearchSource source, final BlogSearchRequest request) {
+  @Autowired
+  private NaverBlogSearchSource naverBlogSearchSource;
+
+  @Autowired
+  private CircuitBreakerFactory circuitBreakerFactory;
+
+
+  private BlogSearchResult _search(final BlogSearchSource source, final BlogSearchRequest request) {
     final String urlTemplate = source.getUrlTemplate();
-    final HttpEntity<?> entity = new HttpEntity<>(source.getHttpHeaders(request));
+    final HttpEntity<?> entity = new HttpEntity<>(source.getHttpHeaders());
     final Map<String, Object> parameters = source.getParameters(request);
 
     final HttpEntity<String> response = restTemplate.exchange(
@@ -52,6 +63,18 @@ public class BlogSearchClient {
     final List<BlogDocument> documents = source.parseBlogDocuments(json);
 
     return new BlogSearchResult(meta, documents);
+  }
+
+  public BlogSearchResult search(final BlogSearchRequest request) {
+    CircuitBreaker circuitBreaker = circuitBreakerFactory.create("searchClientCircuitBreaker");
+    CircuitBreaker lastCircuitBreaker = circuitBreakerFactory.create("last");
+
+    return circuitBreaker.run(
+        () -> _search(kakaoBlogSearchSource, request),
+        throwable -> lastCircuitBreaker.run(
+            () -> _search(naverBlogSearchSource, request),
+            finalThrowable -> BlogSearchResult.emptyResult())
+    );
   }
 
 }

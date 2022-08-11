@@ -10,14 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Getter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
-@Component
+@Getter
 public class NaverBlogSearchSource implements BlogSearchSource {
 
   static int MAX_SEARCH_SIZE = 100;
@@ -26,19 +25,24 @@ public class NaverBlogSearchSource implements BlogSearchSource {
 
   static DateTimeFormatter NAVER_BLOG_DATE_TIME = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-  @Value("${client.naver.client.id}")
   private String clientId;
 
-  @Value("${client.naver.client.secret}")
   private String clientSecret;
 
-  @Value("${client.naver.url}")
-  private String naverBlogSearchUrl;
+  private String blogSearchUrl;
 
+  public NaverBlogSearchSource(
+      final String naverClientId,
+      final String naverClientSecret,
+      final String naverBlogSearchUrl) {
+    this.clientId = naverClientId;
+    this.clientSecret = naverClientSecret;
+    this.blogSearchUrl = naverBlogSearchUrl;
+  }
 
   @Override
   public String getUrlTemplate() {
-    return UriComponentsBuilder.fromHttpUrl(naverBlogSearchUrl)
+    return UriComponentsBuilder.fromHttpUrl(blogSearchUrl)
         .queryParam("query", "{query}")
         .queryParam("sort", "{sort}")
         .queryParam("start", "{start}")
@@ -49,7 +53,7 @@ public class NaverBlogSearchSource implements BlogSearchSource {
 
 
   @Override
-  public HttpHeaders getHttpHeaders(BlogSearchRequest request) {
+  public HttpHeaders getHttpHeaders() {
     HttpHeaders headers = new HttpHeaders();
     headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
     headers.set("X-Naver-Client-Id", clientId);
@@ -57,7 +61,8 @@ public class NaverBlogSearchSource implements BlogSearchSource {
     return headers;
   }
 
-  String sortToQueryParam(final SearchSort sort) {
+  @Override
+  public String sortToQueryParam(final SearchSort sort) {
     switch (sort) {
       case RECENCY:
         return "date";
@@ -85,10 +90,13 @@ public class NaverBlogSearchSource implements BlogSearchSource {
     int start = (int) json.get("start");
     int display = (int) json.get("display");
 
+    int pageableCount = Math.min(total, MAX_SEARCH_START + MAX_SEARCH_SIZE);
+    boolean isEndPage = pageableCount <= start + display - 1;
+
     SearchMeta searchMeta = new SearchMeta();
     searchMeta.setTotalCount(total);
-    searchMeta.setPageableCount(Math.min(total, MAX_SEARCH_START + MAX_SEARCH_SIZE));
-    searchMeta.setIsEndPage(total <= start + display - 1);
+    searchMeta.setPageableCount(pageableCount);
+    searchMeta.setIsEndPage(isEndPage);
 
     return searchMeta;
   }

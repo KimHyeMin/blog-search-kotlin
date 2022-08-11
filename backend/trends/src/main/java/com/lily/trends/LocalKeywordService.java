@@ -25,6 +25,9 @@ public class LocalKeywordService implements KeywordService {
 
   @Override
   public synchronized List<FrequentKeyword> getTopKeywords(final int top) {
+    if (top <= 0) {
+      throw new RuntimeException("Top num must greater than 0, but received top: " + top);
+    }
     return answer.subList(0, Math.min(top, answer.size()));
   }
 
