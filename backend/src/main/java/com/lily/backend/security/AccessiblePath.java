@@ -6,6 +6,7 @@ import java.util.List;
 
 public class AccessiblePath {
 
+  public static final String MAIN = "/";
   public static final String LOGIN = "/api/v1/user/login";
   public static final String REGISTER = "/api/v1/user/register";
   public static final String H2_CONSOLE = "/h2-console/**";

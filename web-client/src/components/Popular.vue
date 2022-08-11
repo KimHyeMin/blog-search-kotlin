@@ -21,6 +21,12 @@ export default {
   methods: {
     fetch() {
       this.$store.dispatch("$search/fetchRanking")
+      .then(()=>{},
+          (error) => {
+            if (error.status === 401) {
+              this.$router.push("/login")
+            }
+      })
     }
   },
   mounted() {

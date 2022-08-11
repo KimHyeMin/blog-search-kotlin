@@ -6,7 +6,6 @@ import com.lily.backend.blog.response.SimpleFavoriteResult;
 import com.lily.backend.common.dto.APIResponse;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,23 +31,18 @@ public class FavoriteController {
 
     SimpleFavoriteResult result = new SimpleFavoriteResult(success);
 
-    return APIResponse.<SimpleFavoriteResult>builder()
-        .code(HttpStatus.OK.value())
-        .result(result)
-        .build();
+    return APIResponse.success(result);
   }
 
   @GetMapping("/favorites/list")
-  public APIResponse<FavoriteBlogResult> getMyFavoriteList(@PathVariable Long userId,@RequestParam(required = false) Long searchAfter) {
+  public APIResponse<FavoriteBlogResult> getMyFavoriteList(@PathVariable Long userId,
+      @RequestParam(required = false) Long searchAfter) {
 
     List<BlogDto> list = favoriteBlogService.getMyList(userId, searchAfter);
     FavoriteBlogResult result = new FavoriteBlogResult();
     result.setBlogList(list);
 
-    return APIResponse.<FavoriteBlogResult>builder()
-        .code(HttpStatus.OK.value())
-        .result(result)
-        .build();
+    return APIResponse.success(result);
   }
 
   @DeleteMapping(value = "/favorites/{favoriteId}")
@@ -57,12 +51,7 @@ public class FavoriteController {
     boolean success = favoriteBlogService.remove(userId, favoriteId);
 
     SimpleFavoriteResult result = new SimpleFavoriteResult(success);
-    return APIResponse.<SimpleFavoriteResult>builder()
-        .code(HttpStatus.OK.value())
-        .result(result)
-        .build();
+    return APIResponse.success(result);
   }
-
-
 
 }

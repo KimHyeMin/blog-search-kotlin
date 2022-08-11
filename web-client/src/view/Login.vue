@@ -20,7 +20,7 @@
         <b-col lg="6" md="8" >
           <b-card no-body class="bg-secondary border-0">
             <b-card-body class="px-lg-5 py-lg-5">
-              <b-form role="form">
+
                 <base-input alternative
                             class="mb-3"
                             placeholder="Email"
@@ -34,11 +34,12 @@
                             v-model="password">
                 </base-input>
 
+                <div class="error" v-if="errorMessage">{{errorMessage}}</div>
                 <div class="text-center">
                   <b-button type="submit" variant="primary" class="mt-4 mb-3" @click="signIn">Sign in</b-button>
                 </div>
                 <span>or <router-link to="/signUp">Create new account</router-link></span>
-              </b-form>
+
             </b-card-body>
           </b-card>
         </b-col>
@@ -49,6 +50,7 @@
 
 <script>
 import BaseInput from "@/components/common/BaseInput";
+import { mapState } from "vuex"
 
 export default {
   name: 'Login',
@@ -61,12 +63,18 @@ export default {
       password: ''
     }
   },
+  computed: {
+    ...mapState("$auth", ["errorMessage"])
+  },
   methods: {
     signIn() {
       //todo validation input
       this.$store.dispatch("$auth/login", {email: this.email, password: this.password})
-          .then(()=> {
+          .then(() => {
             this.$router.push('/');
+          },
+          ()=> {
+            console.log("login failed");
           });
     }
   }

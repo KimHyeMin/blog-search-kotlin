@@ -20,7 +20,7 @@
         <b-col lg="6" md="8" >
           <b-card no-body class="bg-secondary border-0">
             <b-card-body class="px-lg-5 py-lg-5">
-                <b-form role="form">
+
                   <div class="name-group">
                     <base-input alternative
                                 class="mb-3 mr-8"
@@ -50,11 +50,12 @@
                   <div class="text-muted font-italic text-left" v-if="checkPassword">
                     <small>password strength: <span class="text-success font-weight-700">strong</span></small>
                   </div>
+                  <div class="error" v-if="message">{{message}}</div>
                   <div class="text-center">
                     <b-button type="submit" variant="primary" class="mt-4 mb-3" @click="signUp">Create account</b-button>
                   </div>
                   <span>or back to <router-link to="/login">login</router-link></span>
-                </b-form>
+
             </b-card-body>
           </b-card>
         </b-col>
@@ -96,7 +97,7 @@ export default {
                 this.successful = true
                 this.$router.push({name: 'Success', params: {message : this.message, success:this.successful}});
               }, error => {
-                this.message = error.message
+                this.message = error.errorMessage
                 this.successful = false
           })
     }

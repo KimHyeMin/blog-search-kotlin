@@ -34,7 +34,27 @@ export default {
       if (!userId || !blogId) {
         return;
       }
-      this.$store.dispatch("$favorite/unlike", {favoriteId:blogId, userId:userId});
+      this.$store.dispatch("$favorite/unlike", {favoriteId:blogId, userId:userId})
+      .then(success => {
+        if (success) {
+          this.$set(blog);
+          this.$bvToast.toast('Your favorite is removed from your favorite list. Please check favorite page', {
+                title: 'My Favorite blog is removed',
+                variant: 'warning',
+                solid: true,
+                appendToast: true
+              }
+          )
+        } else {
+          this.$bvToast.toast('removing favorite is failed', {
+                title: 'Failed.',
+                variant: 'danger',
+                solid: true,
+                appendToast: true
+              }
+          )
+        }
+      })
     },
     fetchMore() {
       let userId = this.$store.getters["userId"];
@@ -50,7 +70,7 @@ export default {
         return;
       }
       let param = {userId : userId};
-      this.$store.dispatch("$favorite/fetchMyList", param);
+      this.$store.dispatch("$favorite/fetchMyList", param)
     }
   },
   mounted() {

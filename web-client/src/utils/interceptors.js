@@ -14,7 +14,6 @@ export function setInterceptors(axiosService) {
 
     return response;
   }, function (error) {
-
     return Promise.reject(error);
   });
 

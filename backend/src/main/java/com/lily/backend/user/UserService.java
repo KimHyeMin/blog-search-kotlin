@@ -1,5 +1,6 @@
 package com.lily.backend.user;
 
+import com.lily.backend.common.exception.SignupFailedException;
 import com.lily.backend.security.UserDetailsImpl;
 import com.lily.backend.security.jwt.JwtUtils;
 import com.lily.backend.user.dto.UserDto;
@@ -9,6 +10,7 @@ import com.lily.backend.user.request.SignupRequest;
 import com.lily.backend.user.response.JwtResponse;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,12 +35,18 @@ public class UserService {
   private JwtUtils jwtUtils;
 
   public UserDto register(SignupRequest signupForm) {
-    User save = userRepository.save(map(signupForm));
-    return UserDto.builder()
-        .id(save.getUserId())
-        .name(save.getFirstName() + " " +save.getLastName())
-        .email(save.getEmail())
-        .build();
+    try {
+      User save = userRepository.save(map(signupForm));
+      return UserDto.builder()
+          .id(save.getUserId())
+          .name(save.getFirstName() + " " +save.getLastName())
+          .email(save.getEmail())
+          .build();
+    } catch (DataIntegrityViolationException e) {
+      throw new SignupFailedException("해당 아이디를 사용할 수 없습니다.");
+    } catch (Exception e) {
+      throw new SignupFailedException("회원가입에 실패했습니다.");
+    }
   }
 
   private User map(SignupRequest form) {

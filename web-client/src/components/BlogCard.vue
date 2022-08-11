@@ -62,28 +62,13 @@ export default {
   },
   methods: {
     clickLike(blog) {
-      let toast = {}
       if (blog.like) {
         blog.like = false;
         this.$emit('unlike', blog)
-        toast.variant = "danger"
-        toast.type = "removed"
-        toast.message = "Your favorite is removed from your favorite list."
       } else {
         blog.like = true;
         this.$emit('like', blog)
-        toast.variant = "success"
-        toast.type = "added"
-        toast.message = "Your favorite is added to your favorite list. Please check favorite page"
       }
-
-      this.$bvToast.toast(toast.message, {
-            title: `My Favorite blog is ${toast.type}`,
-            variant: toast.variant,
-            solid: true,
-            appendToast: true
-          }
-      )
     }
   }
 }

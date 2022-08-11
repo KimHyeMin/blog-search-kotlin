@@ -2,12 +2,8 @@ package com.lily.backend.security.jwt;
 
 import static com.lily.backend.security.AccessiblePath.SKIP_FILTER_URLS;
 
-import com.lily.backend.security.AccessiblePath;
 import com.lily.backend.security.UserDetailsServiceImpl;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +66,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     if (StringUtils.hasText(requestTokenHeader) && requestTokenHeader.startsWith("Bearer ")) {
       return requestTokenHeader.substring(7);
     }
-    throw new AuthenticationServiceException("JWT Token does not begin with Bearer String");
+    throw new AuthenticationServiceException("JWT Token does not begin with Bearer String : " + request.getRequestURI());
   }
 }

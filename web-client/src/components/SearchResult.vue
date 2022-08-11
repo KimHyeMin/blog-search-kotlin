@@ -53,8 +53,28 @@ export default {
       if (!userId) {
         return;
       }
+
       this.$store.dispatch("$favorite/like", {blog:blog, userId:userId})
-      this.$set(blog);
+      .then(success => {
+        if (success) {
+          this.$set(blog);
+          this.$bvToast.toast('Your favorite is added to your favorite list. Please check favorite page', {
+                title: 'My Favorite blog is added',
+                variant: 'success',
+                solid: true,
+                appendToast: true
+              }
+          )
+        } else {
+          this.$bvToast.toast('adding favorite is failed', {
+                title: 'Failed',
+                variant: 'danger',
+                solid: true,
+                appendToast: true
+              }
+          )
+        }
+      })
     },
     search(first) {
       this.searchRequest['first'] = first;

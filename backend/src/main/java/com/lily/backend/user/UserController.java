@@ -27,10 +27,7 @@ public class UserController {
     UserDto newUser = userService.register(request);
 
     SingupResult result = SingupResult.success(newUser);
-    return APIResponse.<SingupResult>builder()
-        .code(HttpStatus.OK.value())
-        .result(result)
-        .build();
+    return APIResponse.success(result);
   }
 
   @PostMapping("/login")
@@ -38,9 +35,6 @@ public class UserController {
 
     JwtResponse jwtResponse = userService.authenticate(loginRequest);
 
-    return APIResponse.<JwtResponse>builder()
-        .code(HttpStatus.OK.value())
-        .result(jwtResponse)
-        .build();
+    return APIResponse.success(jwtResponse);
   }
 }

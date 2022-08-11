@@ -45,5 +45,7 @@ export default {
   text-align: left;
 }
 
-
+.error {
+  color: red;
+}
 </style>

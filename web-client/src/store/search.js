@@ -7,20 +7,22 @@ const search = {
           blogList: null,
           meta: null,
           searchRequest: SearchRequest.default(),
-          keywordRanking:null
+          keywordRanking:null,
+          errorMessage:null
         }),
         mutations: {
           success(state, result) {
             state.blogList = result.blogList;
             state.meta = result.metaData;
           },
-          failure(state) {
-            state.results = null;
+          failure(state, message) {
+            state.errorMessage = message;
           },
           init(state) {
             state.blogList = null;
             state.meta = null;
             state.searchRequest = SearchRequest.default();
+            state.errorMessage = null;
           },
           updateRanking(state, result) {
             state.keywordRanking = result;
@@ -35,7 +37,7 @@ const search = {
                         return Promise.resolve(response.data)
                     },
                     error => {
-                        commit('failure')
+                        commit('failure', error.response.errorMessage)
                         return Promise.reject(error.response.data)
                     }
                 )
@@ -44,6 +46,11 @@ const search = {
             return getFrequentKeyword().then(
                 response => {
                   commit('updateRanking', response.data.result.list);
+                  return Promise.resolve(response.data)
+                },
+                error => {
+                  commit('failure', error.response.errorMessage)
+                  return Promise.reject(error.response.data)
                 }
             )
           }

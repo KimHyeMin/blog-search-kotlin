@@ -4,7 +4,6 @@ package com.lily.backend.blog;
 import com.lily.backend.blog.dto.BlogDto;
 import com.lily.backend.blog.dto.FavoriteBlogUrl;
 import com.lily.backend.blog.entity.FavoriteBlog;
-import com.lily.backend.common.exception.AuthenticateException;
 import com.lily.backend.common.exception.NoResourceFindException;
 import com.lily.backend.common.utills.StringCompressUtil;
 import java.io.IOException;
@@ -85,15 +84,16 @@ public class FavoriteBlogService {
     try {
       Optional<FavoriteBlog> blogOpt = favoriteBlogRepository.findById(blogId);
       if (blogOpt.isEmpty()) {
-        throw new NoResourceFindException("blog is not found blogId : " + blogId);
+        throw new NoResourceFindException("blogId is not found : " + blogId);
       }
 
       FavoriteBlog favoriteBlog = blogOpt.get();
       if (!userId.equals(favoriteBlog.getUserId())) {
-        throw new AuthenticateException(String.format("user %s didnt add blog %s", userId, blogId));
+        throw new NoResourceFindException(String.format("user %s didnt add blog %s", userId, blogId));
       }
 
       favoriteBlogRepository.delete(favoriteBlog);
+      return true;
     } catch (Exception e) {
       log.error("Fail to delete favorite blog of user : {}, {}", blogId, e);
     }

@@ -11,12 +11,11 @@ import Success from '../components/Success.vue'
 import store from '../store'
 Vue.use(VueRouter)
 
-const beforeAuth = isAuth => (from, to, next) => {
+const beforeAuth = (from, to, next) => {
     const isAuthenticated = store.getters["isAuthenticated"]
-    if ((isAuthenticated && isAuth) || (!isAuthenticated && !isAuth)) {
-        return next()
+    if (isAuthenticated) {
+        next()
     } else {
-        // 홈 화면으로 이동
         next("/login")
     }
 }
@@ -43,12 +42,11 @@ const router = new VueRouter({
                     component: Popular
                 }
             ],
-            beforeEnter: beforeAuth(true)
+            beforeEnter: beforeAuth
         },
         {
           path: "/login",
-          component: Login,
-          beforeEnter: beforeAuth(false)
+          component: Login
         },
         {
             path: "/signup",
@@ -64,8 +62,7 @@ const router = new VueRouter({
                     name: 'Success',
                     component: Success
                 }
-            ],
-            beforeEnter: beforeAuth(false)
+            ]
         },
 
     ],

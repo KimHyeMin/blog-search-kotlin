@@ -4,7 +4,8 @@ const favorite = {
   namespaced: true,
   state: () => ({
     myList : [],
-    lastFavoriteId : null
+    lastFavoriteId : null,
+    errorMessage:null
   }),
   mutations: {
     updateMyList(state, favorites) {
@@ -26,8 +27,8 @@ const favorite = {
     removeFavorite(state, favoriteId) {
       state.myList = state.myList.filter(it => it.favoriteId !== favoriteId)
     },
-    failure(state) {
-      state.status = {}
+    failure(state, message) {
+      state.errorMessage = message;
     },
   },
   actions: {
@@ -39,7 +40,7 @@ const favorite = {
             return Promise.resolve(response.data)
           },
           error => {
-            commit('failure')
+            commit('failure', error)
             return Promise.resolve(error.response.data)
           }
       )
@@ -53,7 +54,7 @@ const favorite = {
             return Promise.resolve(response.data)
           },
           error => {
-            commit('failure')
+            commit('failure', error.response.errorMessage)
             return Promise.resolve(error.response.data)
           }
       )
@@ -61,7 +62,7 @@ const favorite = {
     like({ commit }, param) {
       return addFavorite(param).then(
           response => {
-            return Promise.resolve(response.data)
+            return Promise.resolve(response.data.result.success)
           },
           error => {
             commit('failure')
@@ -72,9 +73,18 @@ const favorite = {
     unlike({ commit }, param) {
       return removeFavorite(param).then(
           response => {
-            commit('removeFavorite', param.favoriteId);
-            return Promise.resolve(response.data)
+            if (response.data.code === 200) {
+              commit('removeFavorite', param.favoriteId);
+              return Promise.resolve(response.data.result.success)
+            } else {
+              commit('failure')
+              return Promise.resolve(response.data)
+            }
           },
+          error => {
+            commit('failure')
+            return Promise.resolve(error.response.data)
+          }
       )
     }
   }
