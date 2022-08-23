@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocalKeywordService implements KeywordService {
 
-  private final HashMap<String, FrequentKeyword> storage = new HashMap<>();
+  private final HashMap<String, Integer> storage = new HashMap<>();
   private static final int TOP_LIMIT = 100;
 
   private List<String> buffer = new ArrayList<>();
@@ -32,7 +32,7 @@ public class LocalKeywordService implements KeywordService {
     }
 
     synchronized (answerLock) {
-      return answer.subList(0, Math.min(top, answer.size()));
+      return new ArrayList<>(answer.subList(0, Math.min(top, answer.size())));
     }
   }
 
@@ -58,20 +58,15 @@ public class LocalKeywordService implements KeywordService {
 
     log.info("refresh ranking storage....");
     for (String keyword : commitBuffer) {
-      FrequentKeyword frequentKeyword = storage.get(keyword);
-      if (frequentKeyword == null) {
-        storage.put(keyword, new FrequentKeyword(keyword, 1));
-      } else {
-        frequentKeyword.setCount(frequentKeyword.getCount() + 1);
-      }
+      storage.merge(keyword, 1, Integer::sum);
     }
 
-    List<FrequentKeyword> refreshedAnswer = storage
-        .values()
-        .stream()
-        .sorted((a,b) -> b.getCount().compareTo(a.getCount()))
+    List<FrequentKeyword> refreshedAnswer = storage.entrySet().stream()
+        .sorted((a,b) -> b.getValue().compareTo(a.getValue()))
         .limit(TOP_LIMIT)
-        .collect(Collectors.toList());
+        .map(it -> new FrequentKeyword(it.getKey(), it.getValue()))
+        .collect(
+        Collectors.toList());
 
     synchronized (answerLock) {
       answer = refreshedAnswer;
