@@ -2,6 +2,7 @@ package com.lily.trends;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.lily.trends.dto.FrequentKeyword;
@@ -14,6 +15,7 @@ public class LocalKeywordServiceTests {
   @Test
   public void mustGetEmptyTopKeywords() {
     LocalKeywordService localKeywordService = new LocalKeywordService();
+    assertNotNull(localKeywordService.getTopKeywords(5));
     assertEquals(localKeywordService.getTopKeywords(5).size(), 0);
   }
 

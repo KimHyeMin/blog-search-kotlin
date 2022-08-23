@@ -10,7 +10,7 @@ import com.lily.userauth.repository.entity.User;
 import com.lily.userauth.security.UserDetailsImpl;
 import com.lily.userauth.security.jwt.JwtUtils;
 import java.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,19 +21,16 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-  @Autowired
-  private PasswordEncoder encoder;
+  private final PasswordEncoder encoder;
 
-  @Autowired
-  private UserRepository userRepository;
+  private final UserRepository userRepository;
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
+  private final AuthenticationManager authenticationManager;
 
-  @Autowired
-  private JwtUtils jwtUtils;
+  private final JwtUtils jwtUtils;
 
   public UserDto register(SignupRequest signupForm) {
     try {

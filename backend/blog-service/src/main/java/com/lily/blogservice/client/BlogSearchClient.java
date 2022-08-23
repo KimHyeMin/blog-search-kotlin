@@ -9,8 +9,8 @@ import com.lily.blogservice.dto.SearchMeta;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.http.HttpEntity;
@@ -21,21 +21,18 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class BlogSearchClient {
 
-  static private ObjectMapper mapper = new ObjectMapper();
+  static private final ObjectMapper MAPPER = new ObjectMapper();
 
-  @Autowired
-  private RestTemplate restTemplate;
+  private final RestTemplate restTemplate;
 
-  @Autowired
-  private KakaoBlogSearchSource kakaoBlogSearchSource;
+  private final KakaoBlogSearchSource kakaoBlogSearchSource;
 
-  @Autowired
-  private NaverBlogSearchSource naverBlogSearchSource;
+  private final NaverBlogSearchSource naverBlogSearchSource;
 
-  @Autowired
-  private CircuitBreakerFactory circuitBreakerFactory;
+  private final CircuitBreakerFactory circuitBreakerFactory;
 
 
   private BlogSearchResult _search(final BlogSearchSource source, final BlogSearchRequest request) {
@@ -54,7 +51,7 @@ public class BlogSearchClient {
     final String jsonString = response.getBody();
     Map<String, Object> json = new HashMap<>();
     try {
-      json = mapper.readValue(jsonString, Map.class);
+      json = MAPPER.readValue(jsonString, Map.class);
     } catch (JsonProcessingException e) {
       log.error("[Todo check] json mapping failed", e);
     }

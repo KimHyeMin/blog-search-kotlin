@@ -7,6 +7,7 @@ import com.lily.userauth.dto.SignupRequest;
 import com.lily.userauth.dto.SingupResult;
 import com.lily.userauth.dto.UserDto;
 import com.lily.userauth.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
 
-  @Autowired
-  private UserService userService;
+  private final UserService userService;
 
   @PostMapping("/register")
   public APIResponse<SingupResult> register(@RequestBody @Valid final SignupRequest request) {
@@ -32,7 +33,7 @@ public class UserController {
   }
 
   @PostMapping("/login")
-  public APIResponse<JwtResponse> signIn(@RequestBody final LoginRequest loginRequest) {
+  public APIResponse<JwtResponse> signIn(@RequestBody @Valid final LoginRequest loginRequest) {
 
     JwtResponse jwtResponse = userService.authenticate(loginRequest);
 

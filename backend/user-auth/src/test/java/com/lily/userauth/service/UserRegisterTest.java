@@ -92,11 +92,11 @@ class UserRegisterTest {
   }
 
   private User mockUser() {
-    User user = new User();
-    user.setUserId(1L);
-    user.setFirstName("first");
-    user.setLastName("last");
-    user.setEmail("email");
-    return user;
+    return User.builder()
+        .userId(1L)
+        .firstName("first")
+        .lastName("last")
+        .email("email")
+        .build();
   }
 }

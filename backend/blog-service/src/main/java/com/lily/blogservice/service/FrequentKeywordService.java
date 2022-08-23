@@ -3,17 +3,17 @@ package com.lily.blogservice.service;
 import com.lily.trends.KeywordService;
 import com.lily.trends.dto.FrequentKeyword;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
 public class FrequentKeywordService {
 
   private static final int TOP_10 = 10;
 
-  @Autowired
-  private KeywordService keywordService;
+  private final KeywordService keywordService;
 
   public List<FrequentKeyword> getList() {
     return keywordService.getTopKeywords(TOP_10);

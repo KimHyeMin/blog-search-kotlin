@@ -2,7 +2,7 @@ package com.lily.userauth.security;
 
 import com.lily.userauth.security.jwt.JwtAuthenticationEntryPoint;
 import com.lily.userauth.security.jwt.JwtRequestFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,13 +19,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class GlobalSecurityConfig {
 
-  @Autowired
-  private JwtRequestFilter jwtRequestFilter;
+  private final JwtRequestFilter jwtRequestFilter;
 
-  @Autowired
-  private JwtAuthenticationEntryPoint entryPoint;
+  private final JwtAuthenticationEntryPoint entryPoint;
 
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {

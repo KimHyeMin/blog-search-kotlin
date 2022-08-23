@@ -21,26 +21,33 @@ public class LocalKeywordService implements KeywordService {
   private static final int TOP_LIMIT = 100;
 
   private List<String> buffer = new ArrayList<>();
+  private final Object bufferLock = new Object();
   private List<FrequentKeyword> answer = new ArrayList<>();
+  private final Object answerLock = new Object();
 
   @Override
-  public synchronized List<FrequentKeyword> getTopKeywords(final int top) {
+  public List<FrequentKeyword> getTopKeywords(final int top) {
     if (top <= 0) {
       throw new RuntimeException("Top num must greater than 0, but received top: " + top);
     }
-    return answer.subList(0, Math.min(top, answer.size()));
+
+    synchronized (answerLock) {
+      return answer.subList(0, Math.min(top, answer.size()));
+    }
   }
 
   @Override
-  public synchronized void increaseCount(final String keywords) {
-    buffer.add(keywords);
+  public void increaseCount(final String keywords) {
+    synchronized (bufferLock) {
+      buffer.add(keywords);
+    }
   }
 
   @Scheduled(fixedDelay = 1000)
   public void refreshMap() {
     List<String> commitBuffer;
 
-    synchronized (this) {
+    synchronized (bufferLock) {
       commitBuffer = buffer;
       buffer = new ArrayList<>();
     }
@@ -66,7 +73,7 @@ public class LocalKeywordService implements KeywordService {
         .limit(TOP_LIMIT)
         .collect(Collectors.toList());
 
-    synchronized (this) {
+    synchronized (answerLock) {
       answer = refreshedAnswer;
     }
   }

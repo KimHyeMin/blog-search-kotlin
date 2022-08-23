@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +25,10 @@ import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FavoriteBlogService {
 
-  @Autowired
-  private FavoriteBlogRepository favoriteBlogRepository;
+  private final FavoriteBlogRepository favoriteBlogRepository;
 
   public FavoriteBlog addFavorite(Long userId, BlogDocument blog) {
     try {

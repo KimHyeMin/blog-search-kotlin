@@ -7,7 +7,7 @@ import com.lily.blogservice.dto.SimpleFavoriteResult;
 import com.lily.blogservice.repository.entity.FavoriteBlog;
 import com.lily.blogservice.service.FavoriteBlogService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/users/{userId}")
 public class FavoriteController {
 
-  @Autowired
-  private FavoriteBlogService favoriteBlogService;
+  private final FavoriteBlogService favoriteBlogService;
 
   @PostMapping(value = "/favorites")
   public APIResponse<SimpleFavoriteResult> addFavorite(@PathVariable Long userId,
