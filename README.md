@@ -3,6 +3,20 @@
 '블로그 검색 서비스' 는 OPEN API를 사용하여 블로그를 검색할 수 있는 서비스 입니다.
 
 
+Download jar file here : https://github.com/KimHyeMin/blog-search/blob/main/blog-service-0.0.1-SNAPSHOT.jar
+
+### Run
+execute jar file
+```
+>	java -jar blog-service-0.0.1-SNAPSHOT.jar
+```
+
+### Check
+Access to <http://localhost:8080>
+
+
+
+
 ## Development
 ### Overall
 #####  [backend](https://github.com/KimHyeMin/blog-search/tree/main/backend)
