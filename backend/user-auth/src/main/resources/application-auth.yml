@@ -1,4 +1,0 @@
-app:
-  jwt:
-    secret: 'hyemin-secret-key'
-
