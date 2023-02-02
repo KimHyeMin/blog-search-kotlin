@@ -1,2 +1,3 @@
-rootProject.name = "backend2"
+rootProject.name = "backend"
 
+include("blog-service")

@@ -13,6 +13,7 @@ class BlogSearchRouter(val handler: BlogSearchHandler) {
     fun routerFun() = coRouter {
         "/api/v1/search".nest {
             GET("/blogs", handler::search)
+            GET("/frequent/keywords", handler::getKeywords)
         }
     }
 }
