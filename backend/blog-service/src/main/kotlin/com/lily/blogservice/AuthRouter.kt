@@ -1,16 +1,17 @@
 package com.lily.blogservice
 
-import com.lily.blogservice.handler.FavoriteHandler
+import com.lily.blogservice.handler.UserAuthHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.coRouter
 
 @Configuration
-class FavoriteRouter(val handler: FavoriteHandler) {
+class AuthRouter(val handler: UserAuthHandler) {
+
     @Bean
-    fun favoriteFun() = coRouter {
-        "/api/v1/users/{userId}".nest {
-            GET("/favorites/list", handler::getFavoriteList)
+    fun router2Fun() = coRouter{
+        "/api/v1/user".nest {
+            POST("/login", handler::login)
         }
     }
 }

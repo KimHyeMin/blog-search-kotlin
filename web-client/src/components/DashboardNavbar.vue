@@ -76,3 +76,4 @@ export default {
   color : blueviolet;
 }
 </style>
+>>>>>>> 814129c (migrate login function)
